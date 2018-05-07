@@ -4,43 +4,555 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Test">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Administradores">
           <Key>
-            <PropertyRef Name="TestID" />
+            <PropertyRef Name="Id_Admin" />
           </Key>
-          <Property Name="TestID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Id_Admin" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DNI_Admin" Type="nvarchar" MaxLength="9" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Apellidos" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nick" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Foto" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="Id_Cliente" />
+          </Key>
+          <Property Name="Id_Cliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DNI_Cliente" Type="nvarchar" MaxLength="9" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Apellidos" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Estado" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="9" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Poblacion" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Foto" Type="nvarchar" MaxLength="200" />
+          <Property Name="Nick" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Fecha_Nacimiento" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Línea_Pedido">
+          <Key>
+            <PropertyRef Name="Pedido" />
+            <PropertyRef Name="Producto" />
+          </Key>
+          <Property Name="Pedido" Type="int" Nullable="false" />
+          <Property Name="Producto" Type="int" Nullable="false" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+          <Property Name="Precio" Type="smallmoney" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pedidos">
+          <Key>
+            <PropertyRef Name="Id_Pedido" />
+          </Key>
+          <Property Name="Id_Pedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cliente" Type="int" Nullable="false" />
+          <Property Name="Fecha_Pedido" Type="date" Nullable="false" />
+          <Property Name="Confirmado" Type="date" />
+          <Property Name="Cobrado" Type="date" />
+          <Property Name="Enviado" Type="date" />
+          <Property Name="Recibido" Type="date" />
+        </EntityType>
+        <EntityType Name="Productos">
+          <Key>
+            <PropertyRef Name="Id_Producto" />
+          </Key>
+          <Property Name="Id_Producto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Precio" Type="smallmoney" Nullable="false" />
+          <Property Name="Tipo" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="Foto" Type="nvarchar" MaxLength="200" />
+          <Property Name="Descuento" Type="float" Nullable="false" />
+          <Property Name="Escaparate" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="Id_Rol" />
+          </Key>
+          <Property Name="Id_Rol" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="Tipo" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tipo_Producto">
+          <Key>
+            <PropertyRef Name="Id_Tipo" />
+          </Key>
+          <Property Name="Id_Tipo" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Foto_Tipo" Type="nvarchar" MaxLength="200" />
+          <Property Name="Foto_Cabecera" Type="nvarchar" MaxLength="200" />
+          <Property Name="Texto_Tipo" Type="nvarchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="DNI" />
+          </Key>
+          <Property Name="DNI" Type="nvarchar" MaxLength="9" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nick" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Contraseña" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Rol" Type="nchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <Association Name="Administradores_fk0">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Administradores" Type="Self.Administradores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="DNI" />
+            </Principal>
+            <Dependent Role="Administradores">
+              <PropertyRef Name="DNI_Admin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Clientes_fk0">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="DNI" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="DNI_Cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Línea_Pedido_fk0">
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="1" />
+          <End Role="Línea_Pedido" Type="Self.Línea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedidos">
+              <PropertyRef Name="Id_Pedido" />
+            </Principal>
+            <Dependent Role="Línea_Pedido">
+              <PropertyRef Name="Pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Línea_Pedido_fk1">
+          <End Role="Productos" Type="Self.Productos" Multiplicity="1" />
+          <End Role="Línea_Pedido" Type="Self.Línea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Productos">
+              <PropertyRef Name="Id_Producto" />
+            </Principal>
+            <Dependent Role="Línea_Pedido">
+              <PropertyRef Name="Producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Pedidos_fk0">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="Id_Cliente" />
+            </Principal>
+            <Dependent Role="Pedidos">
+              <PropertyRef Name="Cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Productos_fk0">
+          <End Role="Tipo_Producto" Type="Self.Tipo_Producto" Multiplicity="1" />
+          <End Role="Productos" Type="Self.Productos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipo_Producto">
+              <PropertyRef Name="Id_Tipo" />
+            </Principal>
+            <Dependent Role="Productos">
+              <PropertyRef Name="Tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Usuarios_fk0">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id_Rol" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="Rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ModelStoreContainer">
-          <EntitySet Name="Test" EntityType="Self.Test" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Administradores" EntityType="Self.Administradores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Línea_Pedido" EntityType="Self.Línea_Pedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pedidos" EntityType="Self.Pedidos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Productos" EntityType="Self.Productos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipo_Producto" EntityType="Self.Tipo_Producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="Administradores_fk0" Association="Self.Administradores_fk0">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Administradores" EntitySet="Administradores" />
+          </AssociationSet>
+          <AssociationSet Name="Clientes_fk0" Association="Self.Clientes_fk0">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="Línea_Pedido_fk0" Association="Self.Línea_Pedido_fk0">
+            <End Role="Pedidos" EntitySet="Pedidos" />
+            <End Role="Línea_Pedido" EntitySet="Línea_Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="Línea_Pedido_fk1" Association="Self.Línea_Pedido_fk1">
+            <End Role="Productos" EntitySet="Productos" />
+            <End Role="Línea_Pedido" EntitySet="Línea_Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="Pedidos_fk0" Association="Self.Pedidos_fk0">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Pedidos" EntitySet="Pedidos" />
+          </AssociationSet>
+          <AssociationSet Name="Productos_fk0" Association="Self.Productos_fk0">
+            <End Role="Tipo_Producto" EntitySet="Tipo_Producto" />
+            <End Role="Productos" EntitySet="Productos" />
+          </AssociationSet>
+          <AssociationSet Name="Usuarios_fk0" Association="Self.Usuarios_fk0">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Test">
-          <Key>
-            <PropertyRef Name="TestID" />
-          </Key>
-          <Property Name="TestID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityContainer Name="KoalaEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Test" EntityType="Self.Test" />
+          <EntitySet Name="Administradores" EntityType="Model.Administradores" />
+          <EntitySet Name="Clientes" EntityType="Model.Clientes" />
+          <EntitySet Name="Línea_Pedido" EntityType="Model.Línea_Pedido" />
+          <EntitySet Name="Pedidos" EntityType="Model.Pedidos" />
+          <EntitySet Name="Productos" EntityType="Model.Productos" />
+          <EntitySet Name="Roles" EntityType="Model.Roles" />
+          <EntitySet Name="Tipo_Producto" EntityType="Model.Tipo_Producto" />
+          <EntitySet Name="Usuarios" EntityType="Model.Usuarios" />
+          <AssociationSet Name="Administradores_fk0" Association="Model.Administradores_fk0">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Administradores" EntitySet="Administradores" />
+          </AssociationSet>
+          <AssociationSet Name="Clientes_fk0" Association="Model.Clientes_fk0">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="Pedidos_fk0" Association="Model.Pedidos_fk0">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Pedidos" EntitySet="Pedidos" />
+          </AssociationSet>
+          <AssociationSet Name="Línea_Pedido_fk0" Association="Model.Línea_Pedido_fk0">
+            <End Role="Pedidos" EntitySet="Pedidos" />
+            <End Role="Línea_Pedido" EntitySet="Línea_Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="Línea_Pedido_fk1" Association="Model.Línea_Pedido_fk1">
+            <End Role="Productos" EntitySet="Productos" />
+            <End Role="Línea_Pedido" EntitySet="Línea_Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="Productos_fk0" Association="Model.Productos_fk0">
+            <End Role="Tipo_Producto" EntitySet="Tipo_Producto" />
+            <End Role="Productos" EntitySet="Productos" />
+          </AssociationSet>
+          <AssociationSet Name="Usuarios_fk0" Association="Model.Usuarios_fk0">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
+        <EntityType Name="Administradores">
+          <Key>
+            <PropertyRef Name="Id_Admin" />
+          </Key>
+          <Property Name="Id_Admin" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DNI_Admin" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Apellidos" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Foto" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Usuarios" Relationship="Model.Administradores_fk0" FromRole="Administradores" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="Id_Cliente" />
+          </Key>
+          <Property Name="Id_Cliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DNI_Cliente" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Apellidos" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Estado" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Direccion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Poblacion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Foto" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Fecha_Nacimiento" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Usuarios" Relationship="Model.Clientes_fk0" FromRole="Clientes" ToRole="Usuarios" />
+          <NavigationProperty Name="Pedidos" Relationship="Model.Pedidos_fk0" FromRole="Clientes" ToRole="Pedidos" />
+        </EntityType>
+        <EntityType Name="Línea_Pedido">
+          <Key>
+            <PropertyRef Name="Pedido" />
+            <PropertyRef Name="Producto" />
+          </Key>
+          <Property Name="Pedido" Type="Int32" Nullable="false" />
+          <Property Name="Producto" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="10" Scale="4" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Pedidos" Relationship="Model.Línea_Pedido_fk0" FromRole="Línea_Pedido" ToRole="Pedidos" />
+          <NavigationProperty Name="Productos" Relationship="Model.Línea_Pedido_fk1" FromRole="Línea_Pedido" ToRole="Productos" />
+        </EntityType>
+        <EntityType Name="Pedidos">
+          <Key>
+            <PropertyRef Name="Id_Pedido" />
+          </Key>
+          <Property Name="Id_Pedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cliente" Type="Int32" Nullable="false" />
+          <Property Name="Fecha_Pedido" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Confirmado" Type="DateTime" Precision="0" />
+          <Property Name="Cobrado" Type="DateTime" Precision="0" />
+          <Property Name="Enviado" Type="DateTime" Precision="0" />
+          <Property Name="Recibido" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Clientes" Relationship="Model.Pedidos_fk0" FromRole="Pedidos" ToRole="Clientes" />
+          <NavigationProperty Name="Línea_Pedido" Relationship="Model.Línea_Pedido_fk0" FromRole="Pedidos" ToRole="Línea_Pedido" />
+        </EntityType>
+        <EntityType Name="Productos">
+          <Key>
+            <PropertyRef Name="Id_Producto" />
+          </Key>
+          <Property Name="Id_Producto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="10" Scale="4" />
+          <Property Name="Tipo" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="Foto" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Descuento" Type="Double" Nullable="false" />
+          <Property Name="Escaparate" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Línea_Pedido" Relationship="Model.Línea_Pedido_fk1" FromRole="Productos" ToRole="Línea_Pedido" />
+          <NavigationProperty Name="Tipo_Producto" Relationship="Model.Productos_fk0" FromRole="Productos" ToRole="Tipo_Producto" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="Id_Rol" />
+          </Key>
+          <Property Name="Id_Rol" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="Tipo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Usuarios" Relationship="Model.Usuarios_fk0" FromRole="Roles" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Tipo_Producto">
+          <Key>
+            <PropertyRef Name="Id_Tipo" />
+          </Key>
+          <Property Name="Id_Tipo" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Foto_Tipo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Foto_Cabecera" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Texto_Tipo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Productos" Relationship="Model.Productos_fk0" FromRole="Tipo_Producto" ToRole="Productos" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="DNI" />
+          </Key>
+          <Property Name="DNI" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Contraseña" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Rol" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Administradores" Relationship="Model.Administradores_fk0" FromRole="Usuarios" ToRole="Administradores" />
+          <NavigationProperty Name="Clientes" Relationship="Model.Clientes_fk0" FromRole="Usuarios" ToRole="Clientes" />
+          <NavigationProperty Name="Roles" Relationship="Model.Usuarios_fk0" FromRole="Usuarios" ToRole="Roles" />
+        </EntityType>
+        <Association Name="Administradores_fk0">
+          <End Type="Model.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="Model.Administradores" Role="Administradores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="DNI" />
+            </Principal>
+            <Dependent Role="Administradores">
+              <PropertyRef Name="DNI_Admin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Clientes_fk0">
+          <End Type="Model.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="Model.Clientes" Role="Clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="DNI" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="DNI_Cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Pedidos_fk0">
+          <End Type="Model.Clientes" Role="Clientes" Multiplicity="1" />
+          <End Type="Model.Pedidos" Role="Pedidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="Id_Cliente" />
+            </Principal>
+            <Dependent Role="Pedidos">
+              <PropertyRef Name="Cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Línea_Pedido_fk0">
+          <End Type="Model.Pedidos" Role="Pedidos" Multiplicity="1" />
+          <End Type="Model.Línea_Pedido" Role="Línea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedidos">
+              <PropertyRef Name="Id_Pedido" />
+            </Principal>
+            <Dependent Role="Línea_Pedido">
+              <PropertyRef Name="Pedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Línea_Pedido_fk1">
+          <End Type="Model.Productos" Role="Productos" Multiplicity="1" />
+          <End Type="Model.Línea_Pedido" Role="Línea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Productos">
+              <PropertyRef Name="Id_Producto" />
+            </Principal>
+            <Dependent Role="Línea_Pedido">
+              <PropertyRef Name="Producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Productos_fk0">
+          <End Type="Model.Tipo_Producto" Role="Tipo_Producto" Multiplicity="1" />
+          <End Type="Model.Productos" Role="Productos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipo_Producto">
+              <PropertyRef Name="Id_Tipo" />
+            </Principal>
+            <Dependent Role="Productos">
+              <PropertyRef Name="Tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Usuarios_fk0">
+          <End Type="Model.Roles" Role="Roles" Multiplicity="1" />
+          <End Type="Model.Usuarios" Role="Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id_Rol" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="Rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="KoalaEntities">
-          <EntitySetMapping Name="Test">
-            <EntityTypeMapping TypeName="Model.Test">
-              <MappingFragment StoreEntitySet="Test">
-                <ScalarProperty Name="TestID" ColumnName="TestID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+          <EntitySetMapping Name="Administradores">
+            <EntityTypeMapping TypeName="Model.Administradores">
+              <MappingFragment StoreEntitySet="Administradores">
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="DNI_Admin" ColumnName="DNI_Admin" />
+                <ScalarProperty Name="Id_Admin" ColumnName="Id_Admin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="Model.Clientes">
+              <MappingFragment StoreEntitySet="Clientes">
+                <ScalarProperty Name="Fecha_Nacimiento" ColumnName="Fecha_Nacimiento" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+                <ScalarProperty Name="Poblacion" ColumnName="Poblacion" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="DNI_Cliente" ColumnName="DNI_Cliente" />
+                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Línea_Pedido">
+            <EntityTypeMapping TypeName="Model.Línea_Pedido">
+              <MappingFragment StoreEntitySet="Línea_Pedido">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Producto" ColumnName="Producto" />
+                <ScalarProperty Name="Pedido" ColumnName="Pedido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pedidos">
+            <EntityTypeMapping TypeName="Model.Pedidos">
+              <MappingFragment StoreEntitySet="Pedidos">
+                <ScalarProperty Name="Recibido" ColumnName="Recibido" />
+                <ScalarProperty Name="Enviado" ColumnName="Enviado" />
+                <ScalarProperty Name="Cobrado" ColumnName="Cobrado" />
+                <ScalarProperty Name="Confirmado" ColumnName="Confirmado" />
+                <ScalarProperty Name="Fecha_Pedido" ColumnName="Fecha_Pedido" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="Id_Pedido" ColumnName="Id_Pedido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Productos">
+            <EntityTypeMapping TypeName="Model.Productos">
+              <MappingFragment StoreEntitySet="Productos">
+                <ScalarProperty Name="Escaparate" ColumnName="Escaparate" />
+                <ScalarProperty Name="Descuento" ColumnName="Descuento" />
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id_Producto" ColumnName="Id_Producto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Model.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Id_Rol" ColumnName="Id_Rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipo_Producto">
+            <EntityTypeMapping TypeName="Model.Tipo_Producto">
+              <MappingFragment StoreEntitySet="Tipo_Producto">
+                <ScalarProperty Name="Texto_Tipo" ColumnName="Texto_Tipo" />
+                <ScalarProperty Name="Foto_Cabecera" ColumnName="Foto_Cabecera" />
+                <ScalarProperty Name="Foto_Tipo" ColumnName="Foto_Tipo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id_Tipo" ColumnName="Id_Tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="Model.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="DNI" ColumnName="DNI" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

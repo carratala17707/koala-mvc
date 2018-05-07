@@ -4,8 +4,22 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="56d9254edb484f9cab3b66088ad9a7e1" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.Test" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="56d9254edb484f9cab3b66088ad9a7e1" Name="Diagram1" ZoomLevel="62">
+        <EntityTypeShape EntityType="Model.Administradores" Width="1.5" PointX="5.25" PointY="5.625" />
+        <EntityTypeShape EntityType="Model.Clientes" Width="1.5" PointX="5.25" PointY="1.125" />
+        <EntityTypeShape EntityType="Model.Línea_Pedido" Width="1.5" PointX="9.75" PointY="1.875" />
+        <EntityTypeShape EntityType="Model.Pedidos" Width="1.5" PointX="7.5" PointY="1.625" />
+        <EntityTypeShape EntityType="Model.Productos" Width="1.5" PointX="9.5" PointY="5.375" />
+        <EntityTypeShape EntityType="Model.Roles" Width="1.5" PointX="0.75" PointY="3.875" />
+        <EntityTypeShape EntityType="Model.Tipo_Producto" Width="1.5" PointX="7.25" PointY="5.5" />
+        <EntityTypeShape EntityType="Model.Usuarios" Width="1.5" PointX="3" PointY="3.375" />
+        <AssociationConnector Association="Model.Administradores_fk0" />
+        <AssociationConnector Association="Model.Clientes_fk0" />
+        <AssociationConnector Association="Model.Pedidos_fk0" />
+        <AssociationConnector Association="Model.Línea_Pedido_fk0" />
+        <AssociationConnector Association="Model.Línea_Pedido_fk1" />
+        <AssociationConnector Association="Model.Productos_fk0" />
+        <AssociationConnector Association="Model.Usuarios_fk0" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
