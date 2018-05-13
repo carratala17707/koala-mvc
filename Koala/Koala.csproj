@@ -210,8 +210,10 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProductosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -265,6 +267,20 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Imagenes\alimentación.jpg" />
+    <Content Include="Content\Imagenes\CAAE.jpg" />
+    <Content Include="Content\Imagenes\CCF.jpg" />
+    <Content Include="Content\Imagenes\crueltyfreebunny.jpg" />
+    <Content Include="Content\Imagenes\huertos.jpg" />
+    <Content Include="Content\Imagenes\isologotipo.jpg" />
+    <Content Include="Content\Imagenes\isotipo.ico" />
+    <Content Include="Content\Imagenes\koala-shop-header.png" />
+    <Content Include="Content\Imagenes\limpiar.png" />
+    <Content Include="Content\Imagenes\limpieza.jpg" />
+    <Content Include="Content\Imagenes\parafarmacia.jpg" />
+    <Content Include="Content\Imagenes\prodveg.jpg" />
+    <Content Include="Content\Imagenes\terapiaact.jpg" />
+    <Content Include="Content\Imagenes\vegetales.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -347,6 +363,16 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <Content Include="Views\Productos\Create.cshtml" />
+    <Content Include="Views\Productos\Delete.cshtml" />
+    <Content Include="Views\Productos\Details.cshtml" />
+    <Content Include="Views\Productos\Edit.cshtml" />
+    <Content Include="Views\Productos\Index.cshtml" />
+    <Content Include="Views\Clientes\Create.cshtml" />
+    <Content Include="Views\Clientes\Delete.cshtml" />
+    <Content Include="Views\Clientes\Details.cshtml" />
+    <Content Include="Views\Clientes\Edit.cshtml" />
+    <Content Include="Views\Clientes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

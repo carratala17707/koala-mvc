@@ -1,16 +1,22 @@
-﻿using System;
+﻿using Koala.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace Koala.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        private KoalaEntities db = new KoalaEntities();
+
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var tipos = await db.Tipo_Producto.ToListAsync();
+            return View(tipos);
         }
 
         public ActionResult About()
@@ -25,6 +31,14 @@ namespace Koala.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
