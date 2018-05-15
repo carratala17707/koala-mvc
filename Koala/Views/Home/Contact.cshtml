@@ -1,17 +1,101 @@
 ﻿@{
     ViewBag.Title = "Contacto";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<br />
+<br />
+<h2>@ViewBag.Title</h2>
+<br />
+<br />
+<br />
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal" style="padding-left:50px;">
+        <div class="row">
+            <div class="col-md-6">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1564.553070810611!2d-0.4897839420097667!3d38.34652529849998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd62364d5acd9b09%3A0x2331c6ab3f698605!2sCalle+%C3%81ngel+Lozano%2C+17%2C+03001+Alicante!5e0!3m2!1ses!2ses!4v1526331493040"
+                        width="100%" height="450" frameborder="0" style="border:1px"></iframe>
+                <br />
+                <br />
+                <p style="margin-top: 12px;">
+                    <b>The Koala Shop</b>
+                </p>
+                <ul>
+                    <li>
+                        Calle Ángel Lozano nº 17
+                    </li>
+                    <li>
+                        03001 Alicante
+                    </li>
+                    <li>
+                        Tel. 69X XXX XXX
+                    </li>
+                    <li>
+                        thekoalashop@gmail.com
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h3>¿Tienes alguna duda?</h3>
+                <p>¿Deseas estar al tanto de nuestros productos? Escríbenos:</p>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="field1">Nombre</label>
+                    <div class="col-md-8">
+                        <input class="form-control text-box single-line" id="field1" name="field1" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="field2">Apellidos</label>
+                    <div class="col-md-8">
+                        <input class="form-control text-box single-line" id="field2" name="field2" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="field3">Nombre de usuario (opcional)</label>
+                    <div class="col-md-8">
+                        <input class="form-control text-box single-line" id="field3" name="field3" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="field4">Población</label>
+                    <div class="col-md-8">
+                        <input class="form-control text-box single-line" id="field4" name="field4" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="field5">Correo electrónico</label>
+                    <div class="col-md-8">
+                        <input class="form-control text-box single-line" id="field5" name="field5" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="field6">Teléfono</label>
+                    <div class="col-md-8">
+                        <input class="form-control text-box single-line" id="field6" name="field6" type="text">
+                    </div>
+                </div>
+                <div class="form-group" style="padding-left:15px;">
+                    <label for="textArea" class="col-lg-2 control-label">Preguntas/Sugerencias</label>
+                    <div class="col-lg-10" style="padding-left:100px;">
+                        <textarea class="form-control"  rows="3" id="textArea"></textarea>
+                    </div>
+                </div>
+                <div class="checkbox" style="padding-left:15px;">
+                    <label>
+                        <input type="checkbox">Acepto las @Html.ActionLink("Condiciones", "Policy", "Home")
+                    </label>
+                </div>
+                <br/>
+                <br />
+                <div class="form-group" style="padding-left:150px;">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-default">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+}
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>

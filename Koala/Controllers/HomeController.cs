@@ -32,6 +32,12 @@ namespace Koala.Controllers
 
             return View();
         }
+
+        public ActionResult Policy()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
