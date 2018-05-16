@@ -39,8 +39,8 @@
                     <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
                     <li>@Html.ActionLink("Nosotros", "About", "Home")</li>
                     <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Productos", "Index", "Productos")</li>
-                    <li>@Html.ActionLink("Clientes", "Index", "Clientes")</li>
+                    <li>@Html.ActionLink("Productos", "Catalogo", "Productos")</li>
+                    <li>@Html.ActionLink("Carrito", "Catalogo", "Productos")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -49,7 +49,7 @@
     <div class="container body-content" style="margin-top: 12px;">
         @RenderBody()
         <hr />
-        <footer class="footer">
+        <div class="footer">
             <div class="footerIzq">
                 <a href='@Url.Action("Policy", "Home")'>
                     Condiciones
@@ -58,14 +58,18 @@
                 <a href='@Url.Action("Contact", "Home")'>
                     Contacto
                 </a>
+                <br/>
+                <a href='#'>
+                    Preguntas comunes
+                </a>
             </div>
             <div class="footerCentro">
                 <p>&copy; @DateTime.Now.Year - The Koala Shop</p>
             </div>
             <div class="footerDrch">
-                <img style="width:20%;" src="~/Content/Imagenes/17646657.png"/>
+                <img style="width:120%;" src="~/Content/Imagenes/17646657.png"/>
             </div>
-        </footer>
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

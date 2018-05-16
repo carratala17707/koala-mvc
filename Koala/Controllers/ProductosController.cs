@@ -22,6 +22,17 @@ namespace Koala.Controllers
             return View(await productos.ToListAsync());
         }
 
+        public async Task<ActionResult> Catalogo()
+        {
+            var productos = await db.Productos.Include(p => p.Tipo_Producto).ToListAsync();
+            string queryString = Request.QueryString["tipo"];
+            if (!string.IsNullOrEmpty(queryString))
+            {
+                productos = productos.FindAll(p => p.Tipo_Producto.Id_Tipo == queryString);
+            }
+            return View(productos);
+        }
+
         // GET: Productos/Details/5
         public async Task<ActionResult> Details(int? id)
         {

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Koala.Models.Productos>
+
+@{
+    ViewBag.Title = "Productos";
+}
+
+<br />
+<br />
+<h2>Productos</h2>
+<br />
+<br />
+
+<div class="row" style="margin-bottom: 24px;">
+    <div class="col-lg-12">
+        <ul class="nav nav-pills">
+            @if (Request.QueryString["tipo"] == "A")
+            {
+                <li><a href="Catalogo">Todos</a></li>
+                <li class="active"><a href="?tipo=A">Alimentación</a></li>
+                <li><a href="?tipo=P">Parafarmacia</a></li>
+                <li><a href="?tipo=L">Limpieza</a></li>
+            }
+            else if (Request.QueryString["tipo"] == "P")
+            {
+                <li><a href="Catalogo">Todos</a></li>
+                <li><a href="?tipo=A">Alimentación</a></li>
+                <li class="active"><a href="?tipo=P">Parafarmacia</a></li>
+                <li><a href="?tipo=L">Limpieza</a></li>
+            }
+            else if (Request.QueryString["tipo"] == "L")
+            {
+                <li><a href="Catalogo">Todos</a></li>
+                <li><a href="?tipo=A">Alimentación</a></li>
+                <li><a href="?tipo=P">Parafarmacia</a></li>
+                <li class="active"><a href="?tipo=L">Limpieza</a></li>
+            }
+            else
+            {
+                <li class="active"><a href="Catalogo">Todos</a></li>
+                <li><a href="?tipo=A">Alimentación</a></li>
+                <li><a href="?tipo=P">Parafarmacia</a></li>
+                <li><a href="?tipo=L">Limpieza</a></li>
+            }
+        </ul>
+    </div>
+</div>
+
+@foreach (var item in Model)
+{
+    if (item.Escaparate == true)
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <a href="@Url.Action("Details", "Productos", new { id=item.Id_Producto })">
+                    <img class='card-img-top' style="height:50%; width:50%; display:block; margin:auto;"
+                         src="~/Content/Imagenes/@item.Foto" />
+                </a>
+                <div class="card-block">
+                    <h2 class="card-title">
+                        @item.Nombre
+                    </h2>
+                    <br />
+                    <div class="card-text">
+                        <h4 style="text-align:justify;">Precio: @item.Precio.ToString("C2")</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<br />
+<br />
+
+
+
+

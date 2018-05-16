@@ -65,13 +65,29 @@
     {
         <div class="col-md-4">
             <div class="card" id="type-card">
-                <a href="#">
-                    <img class='card-img-top' style="display:block; margin:auto;" 
-                         src="~/Content/Imagenes/@item.Foto_Tipo" />
-                </a>
+                @if (item.Descripcion == "Alimentación")
+                {
+                    <a href="~/Productos/Catalogo?tipo=A">
+                        <img class='card-img-top' style="display:block; margin:auto;"
+                             src="~/Content/Imagenes/@item.Foto_Tipo" />
+                    </a>
+                }
+                @if (item.Descripcion == "Parafarmacia")
+                {
+                    <a href="~/Productos/Catalogo?tipo=P">
+                        <img class='card-img-top' style="display:block; margin:auto;"
+                             src="~/Content/Imagenes/@item.Foto_Tipo" />
+                    </a>
+                }
+                @if (item.Descripcion == "Limpieza")
+                {
+                    <a href="~/Productos/Catalogo?tipo=L">
+                        <img class='card-img-top' style="display:block; margin:auto;"
+                             src="~/Content/Imagenes/@item.Foto_Tipo" />
+                    </a>
+                }
                 <div class="card-block">
-                    <h2 class="card-title mt-3" style="text-align:center; text-decoration:none; 
-                        color:darkgreen;">@item.Descripcion</h2>
+                    <h2 class="card-title">@item.Descripcion</h2>
                     <div class="card-text">
                         <p style="text-align:justify;">@item.Texto_Tipo</p>
                     </div>
