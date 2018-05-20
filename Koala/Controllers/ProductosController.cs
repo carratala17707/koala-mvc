@@ -11,20 +11,18 @@ using Koala.Models;
 
 namespace Koala.Controllers
 {
-    public class ProductosController : Controller
+    public class ProductosController : BaseController
     {
-        private KoalaEntities db = new KoalaEntities();
-
         // GET: Productos
         public async Task<ActionResult> Index()
         {
-            var productos = db.Productos.Include(p => p.Tipo_Producto);
+            var productos = _db.Productos.Include(p => p.Tipo_Producto);
             return View(await productos.ToListAsync());
         }
 
         public async Task<ActionResult> Catalogo()
         {
-            var productos = await db.Productos.Include(p => p.Tipo_Producto).ToListAsync();
+            var productos = await _db.Productos.Include(p => p.Tipo_Producto).ToListAsync();
             string queryString = Request.QueryString["tipo"];
             if (!string.IsNullOrEmpty(queryString))
             {
@@ -40,7 +38,7 @@ namespace Koala.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Productos productos = await db.Productos.FindAsync(id);
+            Productos productos = await _db.Productos.FindAsync(id);
             if (productos == null)
             {
                 return HttpNotFound();
@@ -51,7 +49,7 @@ namespace Koala.Controllers
         // GET: Productos/Create
         public ActionResult Create()
         {
-            ViewBag.Tipo = new SelectList(db.Tipo_Producto, "Id_Tipo", "Descripcion");
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion");
             return View();
         }
 
@@ -64,12 +62,12 @@ namespace Koala.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Productos.Add(productos);
-                await db.SaveChangesAsync();
+                _db.Productos.Add(productos);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Tipo = new SelectList(db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
             return View(productos);
         }
 
@@ -80,12 +78,12 @@ namespace Koala.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Productos productos = await db.Productos.FindAsync(id);
+            Productos productos = await _db.Productos.FindAsync(id);
             if (productos == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Tipo = new SelectList(db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
             return View(productos);
         }
 
@@ -98,11 +96,11 @@ namespace Koala.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(productos).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(productos).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.Tipo = new SelectList(db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
             return View(productos);
         }
 
@@ -113,7 +111,7 @@ namespace Koala.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Productos productos = await db.Productos.FindAsync(id);
+            Productos productos = await _db.Productos.FindAsync(id);
             if (productos == null)
             {
                 return HttpNotFound();
@@ -126,19 +124,10 @@ namespace Koala.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Productos productos = await db.Productos.FindAsync(id);
-            db.Productos.Remove(productos);
-            await db.SaveChangesAsync();
+            Productos productos = await _db.Productos.FindAsync(id);
+            _db.Productos.Remove(productos);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

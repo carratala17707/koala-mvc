@@ -9,19 +9,25 @@ using System.Data.Entity;
 
 namespace Koala.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private KoalaEntities db = new KoalaEntities();
-
         public async Task<ActionResult> Index()
         {
-            var tipos = await db.Tipo_Producto.ToListAsync();
+            var tipos = await _db.Tipo_Producto.ToListAsync();
             return View(tipos);
         }
 
+        [Authorize]
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            var nombreUsuarioLogueado = User.Identity.Name;
+            if (User.IsInRole(KoalaRoles.UserCliente))
+            {
+                ViewBag.Message = "Soy un cliente.";
+            }
+            else
+            {
+            }
 
             return View();
         }
@@ -36,15 +42,6 @@ namespace Koala.Controllers
         public ActionResult Policy()
         {
             return View();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

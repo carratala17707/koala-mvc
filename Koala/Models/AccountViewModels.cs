@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace Koala.Models
 {
@@ -49,9 +50,9 @@ namespace Koala.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Nick")]
+        //[EmailAddress]
+        public string Nick { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -72,13 +73,45 @@ namespace Koala.Models
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Contraseña")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "Confirmar contraseña")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Nombre")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Apellidos")]
+        public string Surname { get; set; }
+
+        [Required]
+        [Display(Name = "Nick")]
+        public string Nick { get; set; }
+
+        [Required]
+        [Display(Name = "DNI")]
+        public string DNI { get; set; }
+
+        [Required]
+        [Display(Name = "Fecha de nacimiento")]
+        public DateTime DateBorn { get; set; }
+
+        [Required]
+        [Display(Name = "Teléfono")]
+        public string Phone { get; set; }
+
+        [Required]
+        [Display(Name = "Dirección")]
+        public string Address { get; set; }
+
+        [Required]
+        [Display(Name = "Población")]
+        public string City { get; set; }
     }
 
     public class ResetPasswordViewModel

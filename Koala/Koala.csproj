@@ -210,6 +210,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Models\Clientes.cs">
       <DependentUpon>KoalaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EstadosCliente.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\KoalaModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -240,6 +242,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>KoalaModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\KoalaRoles.cs" />
     <Compile Include="Models\Línea_Pedido.cs">
       <DependentUpon>KoalaModel.tt</DependentUpon>
     </Compile>
@@ -437,6 +440,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

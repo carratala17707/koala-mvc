@@ -11,14 +11,12 @@ using Koala.Models;
 
 namespace Koala.Controllers
 {
-    public class ClientesController : Controller
+    public class ClientesController : BaseController
     {
-        private KoalaEntities db = new KoalaEntities();
-
         // GET: Clientes
         public async Task<ActionResult> Index()
         {
-            var clientes = db.Clientes.Include(c => c.Usuarios);
+            var clientes = _db.Clientes.Include(c => c.Usuarios);
             return View(await clientes.ToListAsync());
         }
 
@@ -29,7 +27,7 @@ namespace Koala.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clientes clientes = await db.Clientes.FindAsync(id);
+            Clientes clientes = await _db.Clientes.FindAsync(id);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -40,7 +38,7 @@ namespace Koala.Controllers
         // GET: Clientes/Create
         public ActionResult Create()
         {
-            ViewBag.DNI_Cliente = new SelectList(db.Usuarios, "DNI", "Nombre");
+            ViewBag.DNI_Cliente = new SelectList(_db.Usuarios, "DNI", "Nombre");
             return View();
         }
 
@@ -53,12 +51,12 @@ namespace Koala.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Clientes.Add(clientes);
-                await db.SaveChangesAsync();
+                _db.Clientes.Add(clientes);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DNI_Cliente = new SelectList(db.Usuarios, "DNI", "Nombre", clientes.DNI_Cliente);
+            ViewBag.DNI_Cliente = new SelectList(_db.Usuarios, "DNI", "Nombre", clientes.DNI_Cliente);
             return View(clientes);
         }
 
@@ -69,12 +67,12 @@ namespace Koala.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clientes clientes = await db.Clientes.FindAsync(id);
+            Clientes clientes = await _db.Clientes.FindAsync(id);
             if (clientes == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.DNI_Cliente = new SelectList(db.Usuarios, "DNI", "Nombre", clientes.DNI_Cliente);
+            ViewBag.DNI_Cliente = new SelectList(_db.Usuarios, "DNI", "Nombre", clientes.DNI_Cliente);
             return View(clientes);
         }
 
@@ -87,11 +85,11 @@ namespace Koala.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(clientes).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(clientes).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.DNI_Cliente = new SelectList(db.Usuarios, "DNI", "Nombre", clientes.DNI_Cliente);
+            ViewBag.DNI_Cliente = new SelectList(_db.Usuarios, "DNI", "Nombre", clientes.DNI_Cliente);
             return View(clientes);
         }
 
@@ -102,7 +100,7 @@ namespace Koala.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clientes clientes = await db.Clientes.FindAsync(id);
+            Clientes clientes = await _db.Clientes.FindAsync(id);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -115,19 +113,10 @@ namespace Koala.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Clientes clientes = await db.Clientes.FindAsync(id);
-            db.Clientes.Remove(clientes);
-            await db.SaveChangesAsync();
+            Clientes clientes = await _db.Clientes.FindAsync(id);
+            _db.Clientes.Remove(clientes);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

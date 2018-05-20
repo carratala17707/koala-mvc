@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Linq;
 
 namespace Koala.Models
 {
@@ -28,6 +29,99 @@ namespace Koala.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+    }
+
+    public class IdentityManager
+    {
+        public async Task<bool> RoleExistsAsync(string name)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var rm = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+                return await rm.RoleExistsAsync(name);
+            }
+        }
+
+        public async Task<bool> UserExistsAsync(string name)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                return await um.Users.Where(u => u.UserName == name).AnyAsync();
+            }
+        }
+
+        public async Task<bool> CreateRoleAsync(string name)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var rm = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+                var role = await rm.FindByNameAsync(name);
+                if (role == null)
+                {
+                    role = new IdentityRole(name);
+                    var idResult = await rm.CreateAsync(new IdentityRole(name));
+                    return idResult.Succeeded;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> CreateUserAsync(ApplicationUser user, string password)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                if (await um.FindByNameAsync(user.UserName) == null)
+                {
+                    var idResult = await um.CreateAsync(user, password);
+                    return idResult.Succeeded;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> AddUserToRoleAsync(string userId, string roleName)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var rolesForUser = await um.GetRolesAsync(userId);
+                if (!rolesForUser.Contains(roleName))
+                {
+                    var idResult = await um.AddToRoleAsync(userId, roleName);
+                    return idResult.Succeeded;
+                }
+                return true;
+            }
+        }
+
+        public async Task<bool> RemoveUserFromRoleAsync(string userId, string roleName)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var idResult = await um.RemoveFromRoleAsync(userId, roleName);
+                return idResult.Succeeded;
+            }
+        }
+
+        public async Task DeleteRoleAsync(string roleId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var roleUsers = db.Users.Where(u => u.Roles.Any(r => r.RoleId == roleId));
+                var role = db.Roles.Find(roleId);
+
+                foreach (var user in roleUsers)
+                {
+                    await this.RemoveUserFromRoleAsync(user.Id, role.Name);
+                }
+
+                db.Roles.Remove(role);
+                db.SaveChanges();
+            }
         }
     }
 }

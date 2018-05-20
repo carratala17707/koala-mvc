@@ -13,10 +13,9 @@ using Koala.Models;
 namespace Koala.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
 
         public AccountController()
         {
@@ -37,18 +36,6 @@ namespace Koala.Controllers
             private set 
             { 
                 _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
             }
         }
 
@@ -75,7 +62,7 @@ namespace Koala.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Nick, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -151,12 +138,39 @@ namespace Koala.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Nick, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    _db.Usuarios.Add(new Usuarios
+                    {
+                        Contraseña = model.Password,
+                        DNI = model.DNI,
+                        Nick = model.Nick,
+                        Nombre = model.Name,
+                        Rol = "C"
+                    });
+                    _db.Clientes.Add(new Clientes
+                    {
+                        Nombre = model.Name,
+                        Apellidos = model.Surname,
+                        DNI_Cliente = model.DNI,
+                        Direccion = model.Address,
+                        Fecha_Nacimiento = model.DateBorn,
+                        Poblacion = model.City,
+                        Telefono = model.Phone,
+                        Email = model.Email,
+                        Nick = model.Nick,
+                        Estado = EstadosCliente.Activo.ToString()
+                    });
+                    await _db.SaveChangesAsync();
+
+                    var manager = new IdentityManager();
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await manager.CreateRoleAsync(KoalaRoles.UserCliente);
+                    await manager.AddUserToRoleAsync(user.Id, KoalaRoles.UserCliente);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -407,12 +421,6 @@ namespace Koala.Controllers
         {
             if (disposing)
             {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
-
                 if (_signInManager != null)
                 {
                     _signInManager.Dispose();
