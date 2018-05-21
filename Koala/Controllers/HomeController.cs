@@ -17,7 +17,6 @@ namespace Koala.Controllers
             return View(tipos);
         }
 
-        [Authorize]
         public ActionResult About()
         {
             var nombreUsuarioLogueado = User.Identity.Name;
@@ -27,6 +26,7 @@ namespace Koala.Controllers
             }
             else
             {
+                ViewBag.Message = "No soy un cliente.";
             }
 
             return View();
@@ -39,6 +39,7 @@ namespace Koala.Controllers
             return View();
         }
 
+        //[Authorize]
         public ActionResult Policy()
         {
             return View();

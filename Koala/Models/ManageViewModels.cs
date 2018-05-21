@@ -5,13 +5,42 @@ using Microsoft.Owin.Security;
 
 namespace Koala.Models
 {
-    public class IndexViewModel
+    public class ManageViewModel
     {
-        public bool HasPassword { get; set; }
-        public IList<UserLoginInfo> Logins { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool TwoFactor { get; set; }
-        public bool BrowserRemembered { get; set; }
+        public ProfileViewModel Profile { get; set; }
+        public List<OrderViewModel> Orders { get; set; }
+        //public bool HasPassword { get; set; }
+        //public IList<UserLoginInfo> Logins { get; set; }
+        //public string PhoneNumber { get; set; }
+        //public bool TwoFactor { get; set; }
+        //public bool BrowserRemembered { get; set; }
+    }
+
+    public class OrderViewModel
+    {
+        public int NumPedido { get; set; }
+        public System.DateTime FechaPedido { get; set; }
+        public System.DateTime FechaConfirmado { get; set; }
+        public System.DateTime FechaPagado { get; set; }
+        public System.DateTime FechaEnviado { get; set; }
+        public System.DateTime FechaRecibido { get; set; }
+        public double totalPrecio { get; set; }
+    }
+
+
+    public class ProfileViewModel
+    {
+        public string Nombre { get; set; }
+        public string Apellidos { get; set; }
+        public string Nick { get; set; }
+        public string Contraseña { get; set; }
+        public string DNI { get; set; }
+        public string Telefono { get; set; }
+        public string Direccion { get; set; }
+        public string Poblacíon { get; set; }
+        public System.DateTime FechaNacimiento { get; set; }
+        public string Email { get; set; }
+        public string Foto { get; set; }
     }
 
     public class ManageLoginsViewModel

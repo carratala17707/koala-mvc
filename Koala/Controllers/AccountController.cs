@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -142,31 +143,35 @@ namespace Koala.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    _db.Usuarios.Add(new Usuarios
+                    var usuario = await _db.Usuarios.FirstOrDefaultAsync(u => u.Nick == model.Nick);
+                    if (usuario == null)
                     {
-                        Contraseña = model.Password,
-                        DNI = model.DNI,
-                        Nick = model.Nick,
-                        Nombre = model.Name,
-                        Rol = "C"
-                    });
-                    _db.Clientes.Add(new Clientes
-                    {
-                        Nombre = model.Name,
-                        Apellidos = model.Surname,
-                        DNI_Cliente = model.DNI,
-                        Direccion = model.Address,
-                        Fecha_Nacimiento = model.DateBorn,
-                        Poblacion = model.City,
-                        Telefono = model.Phone,
-                        Email = model.Email,
-                        Nick = model.Nick,
-                        Estado = EstadosCliente.Activo.ToString()
-                    });
-                    await _db.SaveChangesAsync();
+                        _db.Usuarios.Add(new Usuarios
+                        {
+                            Contraseña = model.Password,
+                            DNI = model.DNI,
+                            Nick = model.Nick,
+                            Nombre = model.Name,
+                            Rol = "C"
+                        });
+                        _db.Clientes.Add(new Clientes
+                        {
+                            Nombre = model.Name,
+                            Apellidos = model.Surname,
+                            DNI_Cliente = model.DNI,
+                            Direccion = model.Address,
+                            Fecha_Nacimiento = model.DateBorn,
+                            Poblacion = model.City,
+                            Telefono = model.Phone,
+                            Email = model.Email,
+                            Nick = model.Nick,
+                            Estado = EstadosCliente.Activo.ToString(),
+                            Foto = "koala.png"
+                        });
+                        await _db.SaveChangesAsync();
+                    }
 
                     var manager = new IdentityManager();
-
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     await manager.CreateRoleAsync(KoalaRoles.UserCliente);
                     await manager.AddUserToRoleAsync(user.Id, KoalaRoles.UserCliente);
