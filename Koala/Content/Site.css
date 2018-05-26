@@ -43,6 +43,12 @@ textarea {
     opacity: .5;
 }
 
+.card.avatar {
+    opacity: 1;
+    width: 76%;
+    min-height: unset;
+}
+
 .card-block {
     font-size: 1em;
     position: relative;
@@ -57,6 +63,10 @@ textarea {
     display: block;
     width: 100%;
     height: auto;
+}
+
+.avatar > .card-img-top {
+    padding: 80px;
 }
 
 .card-title {
@@ -215,5 +225,24 @@ textarea {
     width: 300px;
 }
 
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
 
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        background: white;
+        cursor: inherit;
+        display: block;
+    }
 

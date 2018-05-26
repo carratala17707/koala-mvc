@@ -1,8 +1,11 @@
 ﻿using Koala.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -23,6 +26,15 @@ namespace Koala.Controllers
             {
                 _userManager = value;
             }
+        }
+
+        protected async Task<Models.Usuarios> GetUser()
+        {
+            var userId = User.Identity.GetUserId();
+            var aspnetUser = await UserManager.FindByIdAsync(userId);
+            var user = await _db.Usuarios.Where(u => u.Nick == aspnetUser.UserName)
+                .FirstOrDefaultAsync(); 
+            return user;
         }
 
         protected override void Dispose(bool disposing)

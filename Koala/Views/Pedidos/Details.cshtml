@@ -1,0 +1,66 @@
+﻿@model Koala.Models.Pedidos
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Pedidos</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_Pedido)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Pedido)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Confirmado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Confirmado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cobrado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cobrado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Enviado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Enviado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Recibido)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Recibido)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Clientes.DNI_Cliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clientes.DNI_Cliente)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id_Pedido }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

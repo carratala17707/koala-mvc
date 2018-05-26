@@ -5,9 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System.Data.Entity;
 using Microsoft.Owin.Security;
 using Koala.Models;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Koala.Controllers
 {
@@ -32,34 +34,194 @@ namespace Koala.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
-        //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Index()
         {
-            var userId = User.Identity.GetUserId();
             var orders = new List<OrderViewModel>();
 
-            
+            var pedidos = await _db.Pedidos.Include(p => p.Clientes)
+                .Include(l => l.Línea_Pedido).ToListAsync();
+            var usuario = await base.GetUser();
+            var cliente = await _db.Clientes.Where(c => c.DNI_Cliente == usuario.DNI)
+                .FirstOrDefaultAsync();
+            pedidos = pedidos.FindAll(p => p.Cliente == cliente.Id_Cliente);
 
+            foreach (var item in pedidos)
+            {
+                var order = new OrderViewModel
+                {
+                    Descripcion = "",
+                    NumArticulos = item.Línea_Pedido.Count(),
+                    NumPedido = item.Id_Pedido,
+                    TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio),
+                    FechaPedido = item.Fecha_Pedido,
+                };
+                if (item.Confirmado.HasValue)
+                {
+                    order.FechaConfirmado = item.Confirmado.Value;
+                    order.Estado = OrderViewModel.EstadoPedido.Confirmado;
+                }
+                if (item.Cobrado.HasValue)
+                {
+                    order.FechaPagado = item.Cobrado.Value;
+                    order.Estado = OrderViewModel.EstadoPedido.Pagado;
+                }
+                if (item.Enviado.HasValue)
+                {
+                    order.FechaEnviado = item.Enviado.Value;
+                    order.Estado = OrderViewModel.EstadoPedido.Enviado;
+                }
+                if (item.Recibido.HasValue)
+                {
+                    order.FechaRecibido = item.Recibido.Value;
+                    order.Estado = OrderViewModel.EstadoPedido.Recibido;
+                }
+                string desc = string.Empty;
+                foreach (var linea in item.Línea_Pedido)
+                {
+                    if (linea.Productos != null)
+                    {
+                        desc += linea.Productos.Nombre + ", ";
+                    }
+                }
+                order.Descripcion = desc;
+                orders.Add(order);
+            }
 
             var model = new ManageViewModel
             {
                 Profile = new ProfileViewModel
                 {
-
+                    Nombre = cliente.Nombre,
+                    Apellidos = cliente.Apellidos,
+                    Nick = cliente.Nick,
+                    Contraseña = usuario.Contraseña,
+                    DNI = cliente.DNI_Cliente,
+                    Email = cliente.Email,
+                    FechaNacimiento = cliente.Fecha_Nacimiento,
+                    Direccion = cliente.Direccion,
+                    Poblacíon = cliente.Poblacion,
+                    Telefono = cliente.Telefono,
+                    NombreFoto = cliente.Foto,
+                    UsuarioID = cliente.Id_Cliente
                 },
                 Orders = orders
             };
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditUser(ManageViewModel model)
+        {
+            var profile = model.Profile;
+            var usuario = await _db.Clientes.Where(c => c.Id_Cliente == profile.UsuarioID)
+                .FirstOrDefaultAsync();
+            if (usuario != null)
+            {
+                usuario.Nombre = profile.Nombre;
+                usuario.Apellidos = profile.Apellidos;
+                usuario.Direccion = profile.Direccion;
+                usuario.Email = profile.Email;
+                usuario.Fecha_Nacimiento = profile.FechaNacimiento;
+                usuario.Telefono = profile.Telefono;
+                usuario.Poblacion = profile.Poblacíon;
+
+                _db.Entry(usuario).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        // GET: /Manage/OrderDetails/id
+        public async Task<ActionResult> OrderDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var pedido = await _db.Pedidos.Include(l => l.Línea_Pedido)
+                .Where(p => p.Id_Pedido == id).FirstOrDefaultAsync();
+            if (pedido == null)
+            {
+                return HttpNotFound();
+            }
+            return View(pedido);
+        }
+
+        // GET: /Manage/Admin
+        public async Task<ActionResult> Admin()
+        {
+            var orders = new List<OrderViewModel>();
+
+            var pedidos = await _db.Pedidos.Include(p => p.Clientes)
+                 .Include(l => l.Línea_Pedido).ToListAsync();
+            var clientes = await _db.Clientes.FirstOrDefaultAsync();
+            var productos = await _db.Productos.FirstOrDefaultAsync();
+            var usuario = await base.GetUser();
+            var administrador = await _db.Administradores.Where(a => a.DNI_Admin == usuario.DNI)
+                .FirstOrDefaultAsync();
+
+            foreach (var item in pedidos)
+            {
+                var order = new OrderViewModel
+                {
+                    Descripcion = "",
+                    NumArticulos = item.Línea_Pedido.Count(),
+                    NumPedido = item.Id_Pedido,
+                    TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio),
+                    FechaPedido = item.Fecha_Pedido,
+                };
+                if (item.Confirmado.HasValue)
+                {
+                    order.FechaConfirmado = item.Confirmado.Value;
+                    order.Estado = OrderViewModel.EstadoPedido.Confirmado;
+                }
+                if (item.Cobrado.HasValue)
+                {
+                    order.FechaPagado = item.Cobrado.Value;
+                    order.Estado = OrderViewModel.EstadoPedido.Pagado;
+                }
+                if (item.Enviado.HasValue)
+                {
+                    order.FechaEnviado = item.Enviado.Value;
+                    order.Estado = OrderViewModel.EstadoPedido.Enviado;
+                }
+                if (item.Recibido.HasValue)
+                {
+                    order.FechaRecibido = item.Recibido.Value;
+                    order.Estado = OrderViewModel.EstadoPedido.Recibido;
+                }
+                string desc = string.Empty;
+                foreach (var linea in item.Línea_Pedido)
+                {
+                    if (linea.Productos != null)
+                    {
+                        desc += linea.Productos.Nombre + ", ";
+                    }
+                }
+                order.Descripcion = desc;
+                orders.Add(order);
+            }
+
+            var model = new ManageViewModel
+            {
+                Profile = new ProfileViewModel
+                {
+                    Nick = clientes.Nick,
+                },
+                Orders = orders
+            };
+            return View(model);
+        }
         //
+
         // POST: /Manage/RemoveLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -357,6 +519,6 @@ namespace Koala.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

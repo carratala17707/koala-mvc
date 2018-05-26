@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using Koala.Helpers;
+using System.Web;
 
 namespace Koala.Models
 {
@@ -24,23 +27,58 @@ namespace Koala.Models
         public System.DateTime FechaPagado { get; set; }
         public System.DateTime FechaEnviado { get; set; }
         public System.DateTime FechaRecibido { get; set; }
-        public double totalPrecio { get; set; }
-    }
+        public decimal TotalPrecio { get; set; }
+        public string Descripcion { get; set; }
+        public int NumArticulos { get; set; }
+        public EstadoPedido Estado { get; set; }
 
+        public enum EstadoPedido
+        {
+            Confirmado, Pagado, Enviado, Recibido
+        }
+    }
 
     public class ProfileViewModel
     {
+        [Required]
+        [Display(Name = "Nombre")]
         public string Nombre { get; set; }
+        [Required]
+        [Display(Name = "Apellidos")]
         public string Apellidos { get; set; }
+        [Required]
+        [Display(Name = "Nick")]
         public string Nick { get; set; }
+        [Required]
+        [StringLength(100, ErrorMessage = "La {0} debe ser al menos de {2} carácteres de longitud.", MinimumLength = 3)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Nueva contraseña")]
         public string Contraseña { get; set; }
+        [Required]
+        [Display(Name = "DNI")]
         public string DNI { get; set; }
+        [Required]
+        [Display(Name = "Teléfono")]
+        [DataType(DataType.PhoneNumber)]
         public string Telefono { get; set; }
+        [Required]
+        [Display(Name = "Dirección")]
         public string Direccion { get; set; }
+        [Required]
+        [Display(Name = "Población")]
         public string Poblacíon { get; set; }
+        [Required]
+        [Display(Name = "Fecha de nacimiento")]
         public System.DateTime FechaNacimiento { get; set; }
+        [Required]
+        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-        public string Foto { get; set; }
+        public string NombreFoto { get; set; }
+        [Display(Name = "Foto")]
+        [HttpPostedFileExtensions(Extensions = "jpg,jpeg,png,bmp", ErrorMessage = "Formato de fichero inválido.")]
+        public HttpPostedFileBase FotoAttachment { get; set; }
+        public int UsuarioID { get; set; }
     }
 
     public class ManageLoginsViewModel

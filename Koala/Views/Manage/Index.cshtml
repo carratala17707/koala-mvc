@@ -9,87 +9,240 @@
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#home" data-toggle="tab" aria-expanded="false">Datos personales</a></li>
-        <li class=""><a href="#profile" data-toggle="tab" aria-expanded="true">Pedidos realizados</a></li>
+        <li class="active"><a href="#perfil" data-toggle="tab">Datos personales</a></li>
+        <li><a href="#pedidos" data-toggle="tab">Mis compras</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade" id="home">
+        <div class="tab-pane fade active in" id="perfil">
 
+            @using (Html.BeginForm("EditUser", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Profile.UsuarioID)
 
-
+                <div class="row" style="margin-top: 35px;">
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.Nombre, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.Nombre, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.Apellidos, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.Apellidos, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.Nick, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.Nick, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.Nick, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.Contraseña, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.Contraseña, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.Contraseña, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.DNI, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.DNI, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.DNI, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.FechaNacimiento, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @{
+                                            string parameterValueFechaNac = Model.Profile.FechaNacimiento.ToShortDateString();
+                                        }
+                                        @Html.EditorFor(modelItem => parameterValueFechaNac, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.FechaNacimiento, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.Direccion, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.Direccion, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.Direccion, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.Poblacíon, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.Poblacíon, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.Poblacíon, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.Telefono, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Profile.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Profile.Telefono, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-9 col-lg-offset-3">
+                                        <div class="card avatar">
+                                            <img class="card-img-top"
+                                                 src="~/Content/Imagenes/@Model.Profile.NombreFoto" />
+                                            <div class="card-block">
+                                               <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <span class="btn btn-default btn-file">
+                                                            <span class="glyphicon glyphicon-folder-open"></span>&nbsp;Buscar archivo...
+                                                            @Html.TextBoxFor(m => m.Profile.FotoAttachment, new { type = "file", accept = "image/*" })
+                                                        </span>
+                                                    </span>
+                                                    @Html.TextBoxFor(m => m.Profile.NombreFoto, new
+                                                    {
+                                                        @class = "form-control text-right avatar-input",
+                                                        @readonly = "",
+                                                        id = "logo-attachment-input"
+                                                    })
+                                                </div>
+                                                @Html.ValidationMessageFor(model => model.Profile.FotoAttachment, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                    @Html.LabelFor(model => model.Profile.FotoAttachment, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <span class="btn btn-default btn-file">
+                                                    <span class="glyphicon glyphicon-folder-open"></span>&nbsp;Buscar archivo...
+                                                    @Html.TextBoxFor(m => m.Profile.FotoAttachment, new { type = "file", accept = "image/*" })
+                                                </span>
+                                            </span>
+                                            @Html.TextBoxFor(m => m.Profile.NombreFoto, new
+                                            {
+                                                @class = "form-control text-right",
+                                                @readonly = "",
+                                                id = "logo-attachment-input",
+                                                @style = "width: 135px;"
+                                            })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.Profile.FotoAttachment, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>*@
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-offset-4">
+                                @*<a class="btn btn-default" href="@Url.Action("Index")">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>&nbsp;Volver
+                                </a>*@
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-ok"></span>&nbsp;Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
-        <div class="tab-pane fade active in" id="profile">
 
+        <div class="tab-pane fade" id="pedidos">
+            <table class="table" style="margin-top: 30px;">
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Num. Artículos
+                    </th>
+                    <th>
+                        Productos
+                    </th>
+                    <th>
+                        Fecha pedido
+                    </th>
+                    <th>
+                        Fecha confirmado
+                    </th>
+                    <th>
+                        Fecha enviado
+                    </th>
+                    <th>
+                        Fecha recibido
+                    </th>
+                    <th>
+                        Total precio
+                    </th>
+                    <th></th>
+                </tr>
 
-
+                @foreach (var item in Model.Orders)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumPedido)
+                        </td>
+                        <td style="text-align:center;">
+                            @Html.DisplayFor(modelItem => item.NumArticulos)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descripcion)
+                        </td>
+                        <td>
+                            @{
+                                string parameterValuePedido = item.FechaPedido.ToShortDateString();
+                            }
+                            @Html.DisplayFor(modelItem => parameterValuePedido)
+                        </td>
+                        <td>
+                            @{
+                                string parameterValueConfirmado = item.FechaConfirmado.ToShortDateString();
+                            }
+                            @Html.DisplayFor(modelItem => parameterValueConfirmado)
+                        </td>
+                        <td>
+                            @{
+                                string parameterValueEnviado = item.FechaEnviado.ToShortDateString();
+                            }
+                            @Html.DisplayFor(modelItem => parameterValueEnviado)
+                        </td>
+                        <td>
+                            @{
+                                string parameterValueRecibido = item.FechaRecibido.ToShortDateString();
+                            }
+                            @Html.DisplayFor(modelItem => parameterValueRecibido)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalPrecio) €
+                        </td>
+                        <td>
+                            @Html.ActionLink("Detalle", "OrderDetails", new { id = item.NumPedido })
+                        </td>
+                    </tr>
+                }
+            </table>
         </div>
     </div>
 </div>
+<br />
+<br />
+<br />
+<br />
 
-@*<dl class="dl-horizontal">
-    <dt>Password:</dt>
-    <dd>
-        [
-        @if (Model.HasPassword)
-            {
-            @Html.ActionLink("Change your password", "ChangePassword")
-        }
-        else
-        {
-            @Html.ActionLink("Create", "SetPassword")
-        }
-        ]
-    </dd>
-
-    <dt>External Logins:</dt>
-    <dd>
-        @Model.Logins.Count [ @Html.ActionLink("Manage", "ManageLogins") ]
-    </dd>
-
-    <dt>Phone Number:</dt>
-    <dd>
-        @(Model.PhoneNumber ?? "None")
-        @if (Model.PhoneNumber != null)
-            {
-            <br />
-                <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-            using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
-            }
-        }
-        else
-        {
-            <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")</text>
-        }
-    </dd>
-
-    <dt>Two-Factor Authentication:</dt>
-    <dd>
-        <p>
-            There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-            for details on setting up this ASP.NET application to support two-factor authentication.
-        </p>
-        @if (Model.TwoFactor)
-            {
-                using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                @Html.AntiForgeryToken()
-                <text>Enabled
-                    <input type="submit" value="Disable" class="btn btn-link" />
-                </text>
-            }
-        }
-        else
-        {
-            using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <text>Disabled
-                    <input type="submit" value="Enable" class="btn btn-link" />
-                </text>
-            }
-        }
-    </dd>
-</dl>*@

@@ -1,0 +1,53 @@
+﻿@model Koala.Models.Pedidos
+
+@{
+    ViewBag.Title = "Detalles del pedido";
+}
+
+<h2 class="page-header">Detalles del pedido</h2>
+
+<h3>ID de pedido: @Model.Id_Pedido</h3>
+
+<table class="table" style="margin-top:30px;">
+    <tr>
+        <th>
+            ID Producto
+        </th>
+        <th>
+            Nombre
+        </th>
+        <th>
+            Cantidad
+        </th>
+        <th>
+            Precio
+        </th>
+    </tr>
+
+@foreach (var item in Model.Línea_Pedido) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Producto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cantidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Precio) €
+        </td>
+    </tr>
+}
+</table>
+<p>
+    @Html.ActionLink("Volver", "Index")
+</p>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
