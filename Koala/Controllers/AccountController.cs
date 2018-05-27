@@ -22,7 +22,7 @@ namespace Koala.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +34,9 @@ namespace Koala.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -108,7 +108,7 @@ namespace Koala.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -139,56 +139,80 @@ namespace Koala.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Nick, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var createResult = await CreateCustomerUser(model);
+                if (createResult.Success)
                 {
-                    var usuario = await _db.Usuarios.FirstOrDefaultAsync(u => u.Nick == model.Nick);
-                    if (usuario == null)
-                    {
-                        _db.Usuarios.Add(new Usuarios
-                        {
-                            Contraseña = model.Password,
-                            DNI = model.DNI,
-                            Nick = model.Nick,
-                            Nombre = model.Name,
-                            Rol = "C"
-                        });
-                        _db.Clientes.Add(new Clientes
-                        {
-                            Nombre = model.Name,
-                            Apellidos = model.Surname,
-                            DNI_Cliente = model.DNI,
-                            Direccion = model.Address,
-                            Fecha_Nacimiento = model.DateBorn,
-                            Poblacion = model.City,
-                            Telefono = model.Phone,
-                            Email = model.Email,
-                            Nick = model.Nick,
-                            Estado = EstadosCliente.Activo.ToString(),
-                            Foto = "koala.png"
-                        });
-                        await _db.SaveChangesAsync();
-                    }
-
-                    var manager = new IdentityManager();
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    await manager.CreateRoleAsync(KoalaRoles.UserCliente);
-                    await manager.AddUserToRoleAsync(user.Id, KoalaRoles.UserCliente);
-
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                else
+                {
+                    AddErrors(createResult.Result);
+                }
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        class CustomerUserResult
+        {
+            public IdentityResult Result { get; internal set; }
+            public bool Success { get; internal set; }
+        }
+
+        private async Task<CustomerUserResult> CreateCustomerUser(RegisterViewModel model)
+        {
+            bool success = false;
+            var user = new ApplicationUser { UserName = model.Nick, Email = model.Email };
+            var result = await UserManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                var usuario = await _db.Usuarios.FirstOrDefaultAsync(u => u.Nick == model.Nick);
+                if (usuario == null)
+                {
+                    _db.Usuarios.Add(new Usuarios
+                    {
+                        Contraseña = model.Password,
+                        DNI = model.DNI,
+                        Nick = model.Nick,
+                        Nombre = model.Name,
+                        Rol = "C"
+                    });
+                    _db.Clientes.Add(new Clientes
+                    {
+                        Nombre = model.Name,
+                        Apellidos = model.Surname,
+                        DNI_Cliente = model.DNI,
+                        Direccion = model.Address,
+                        Fecha_Nacimiento = model.DateBorn,
+                        Poblacion = model.City,
+                        Telefono = model.Phone,
+                        Email = model.Email,
+                        Nick = model.Nick,
+                        Estado = EstadosCliente.Activo.ToString(),
+                        Foto = "koala.png"
+                    });
+                    await _db.SaveChangesAsync();
+                }
+
+                var manager = new IdentityManager();
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await manager.CreateRoleAsync(KoalaRoles.UserCliente);
+                await manager.AddUserToRoleAsync(user.Id, KoalaRoles.UserCliente);
+
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                success = true;
+            }
+            return new CustomerUserResult
+            {
+                Success = success,
+                Result = result
+            };
         }
 
         //

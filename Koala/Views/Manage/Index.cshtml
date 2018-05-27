@@ -164,80 +164,82 @@
         </div>
 
         <div class="tab-pane fade" id="pedidos">
-            <table class="table" style="margin-top: 30px;">
-                <tr>
-                    <th>
-                        ID
-                    </th>
-                    <th>
-                        Num. Artículos
-                    </th>
-                    <th>
-                        Productos
-                    </th>
-                    <th>
-                        Fecha pedido
-                    </th>
-                    <th>
-                        Fecha confirmado
-                    </th>
-                    <th>
-                        Fecha enviado
-                    </th>
-                    <th>
-                        Fecha recibido
-                    </th>
-                    <th>
-                        Total precio
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var item in Model.Orders)
-                {
+            <div class="row" style="margin-top: 35px;">
+                <table class="table">
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NumPedido)
-                        </td>
-                        <td style="text-align:center;">
-                            @Html.DisplayFor(modelItem => item.NumArticulos)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Descripcion)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValuePedido = item.FechaPedido.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValuePedido)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueConfirmado = item.FechaConfirmado.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueConfirmado)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueEnviado = item.FechaEnviado.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueEnviado)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueRecibido = item.FechaRecibido.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueRecibido)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TotalPrecio) €
-                        </td>
-                        <td>
-                            @Html.ActionLink("Detalle", "OrderDetails", new { id = item.NumPedido })
-                        </td>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Num. Artículos
+                        </th>
+                        <th>
+                            Productos
+                        </th>
+                        <th>
+                            Fecha pedido
+                        </th>
+                        <th>
+                            Fecha confirmado
+                        </th>
+                        <th>
+                            Fecha enviado
+                        </th>
+                        <th>
+                            Fecha recibido
+                        </th>
+                        <th>
+                            Total precio
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </table>
+
+                    @foreach (var item in Model.Orders)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumPedido)
+                            </td>
+                            <td style="text-align:center;">
+                                @Html.DisplayFor(modelItem => item.NumArticulos)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValuePedido = item.FechaPedido.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValuePedido)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValueConfirmado = item.FechaConfirmado.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValueConfirmado)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValueEnviado = item.FechaEnviado.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValueEnviado)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValueRecibido = item.FechaRecibido.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValueRecibido)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalPrecio) €
+                            </td>
+                            <td>
+                                @Html.ActionLink("Detalle", "OrderDetails", new { id = item.NumPedido })
+                            </td>
+                        </tr>
+                                    }
+                </table>
+            </div>
         </div>
     </div>
 </div>

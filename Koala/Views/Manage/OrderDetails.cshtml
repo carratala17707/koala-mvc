@@ -8,45 +8,45 @@
 
 <h3>ID de pedido: @Model.Id_Pedido</h3>
 
-<table class="table" style="margin-top:30px;">
-    <tr>
-        <th>
-            ID Producto
-        </th>
-        <th>
-            Nombre
-        </th>
-        <th>
-            Cantidad
-        </th>
-        <th>
-            Precio
-        </th>
-    </tr>
+<div class="row" style="margin-top: 35px;">
+    <table class="table">
+        <tr>
+            <th>
+                ID Producto
+            </th>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Cantidad
+            </th>
+            <th>
+                Precio
+            </th>
+        </tr>
 
-@foreach (var item in Model.Línea_Pedido) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Producto)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cantidad)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Precio) €
-        </td>
-    </tr>
-}
-</table>
-<p>
-    @Html.ActionLink("Volver", "Index")
-</p>
-<br />
-<br />
-<br />
+        @foreach (var item in Model.Línea_Pedido)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio) €
+                </td>
+            </tr>
+        }
+    </table>
+    <p>
+        @Html.ActionLink("Volver", "Index")
+    </p>
+</div>
 <br />
 <br />
 <br />

@@ -43,77 +43,85 @@ namespace Koala.Controllers
         // GET: /Manage/Index
         public async Task<ActionResult> Index()
         {
-            var orders = new List<OrderViewModel>();
-
-            var pedidos = await _db.Pedidos.Include(p => p.Clientes)
-                .Include(l => l.Línea_Pedido).ToListAsync();
-            var usuario = await base.GetUser();
-            var cliente = await _db.Clientes.Where(c => c.DNI_Cliente == usuario.DNI)
-                .FirstOrDefaultAsync();
-            pedidos = pedidos.FindAll(p => p.Cliente == cliente.Id_Cliente);
-
-            foreach (var item in pedidos)
+            if (User.IsInRole(KoalaRoles.UserCliente))
             {
-                var order = new OrderViewModel
+                var orders = new List<OrderViewModel>();
+
+                var pedidos = await _db.Pedidos.Include(p => p.Clientes)
+                    .Include(l => l.Línea_Pedido).ToListAsync();
+                var usuario = await base.GetUser();
+                var cliente = await _db.Clientes.Where(c => c.DNI_Cliente == usuario.DNI)
+                    .FirstOrDefaultAsync();
+                pedidos = pedidos.FindAll(p => p.Cliente == cliente.Id_Cliente);
+
+                foreach (var item in pedidos)
                 {
-                    Descripcion = "",
-                    NumArticulos = item.Línea_Pedido.Count(),
-                    NumPedido = item.Id_Pedido,
-                    TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio),
-                    FechaPedido = item.Fecha_Pedido,
-                };
-                if (item.Confirmado.HasValue)
-                {
-                    order.FechaConfirmado = item.Confirmado.Value;
-                    order.Estado = OrderViewModel.EstadoPedido.Confirmado;
-                }
-                if (item.Cobrado.HasValue)
-                {
-                    order.FechaPagado = item.Cobrado.Value;
-                    order.Estado = OrderViewModel.EstadoPedido.Pagado;
-                }
-                if (item.Enviado.HasValue)
-                {
-                    order.FechaEnviado = item.Enviado.Value;
-                    order.Estado = OrderViewModel.EstadoPedido.Enviado;
-                }
-                if (item.Recibido.HasValue)
-                {
-                    order.FechaRecibido = item.Recibido.Value;
-                    order.Estado = OrderViewModel.EstadoPedido.Recibido;
-                }
-                string desc = string.Empty;
-                foreach (var linea in item.Línea_Pedido)
-                {
-                    if (linea.Productos != null)
+                    var order = new OrderViewModel
                     {
-                        desc += linea.Productos.Nombre + ", ";
+                        Descripcion = "",
+                        NumArticulos = item.Línea_Pedido.Count(),
+                        NumPedido = item.Id_Pedido,
+                        TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio),
+                        FechaPedido = item.Fecha_Pedido,
+                    };
+                    if (item.Confirmado.HasValue)
+                    {
+                        order.FechaConfirmado = item.Confirmado.Value;
+                        order.Estado = OrderViewModel.EstadoPedido.Confirmado;
                     }
+                    if (item.Cobrado.HasValue)
+                    {
+                        order.FechaPagado = item.Cobrado.Value;
+                        order.Estado = OrderViewModel.EstadoPedido.Pagado;
+                    }
+                    if (item.Enviado.HasValue)
+                    {
+                        order.FechaEnviado = item.Enviado.Value;
+                        order.Estado = OrderViewModel.EstadoPedido.Enviado;
+                    }
+                    if (item.Recibido.HasValue)
+                    {
+                        order.FechaRecibido = item.Recibido.Value;
+                        order.Estado = OrderViewModel.EstadoPedido.Recibido;
+                    }
+                    string desc = string.Empty;
+                    foreach (var linea in item.Línea_Pedido)
+                    {
+                        if (linea.Productos != null)
+                        {
+                            desc += linea.Productos.Nombre + ", ";
+                        }
+                    }
+                    order.Descripcion = desc;
+                    orders.Add(order);
                 }
-                order.Descripcion = desc;
-                orders.Add(order);
-            }
 
-            var model = new ManageViewModel
-            {
-                Profile = new ProfileViewModel
+                var model = new ManageViewModel
                 {
-                    Nombre = cliente.Nombre,
-                    Apellidos = cliente.Apellidos,
-                    Nick = cliente.Nick,
-                    Contraseña = usuario.Contraseña,
-                    DNI = cliente.DNI_Cliente,
-                    Email = cliente.Email,
-                    FechaNacimiento = cliente.Fecha_Nacimiento,
-                    Direccion = cliente.Direccion,
-                    Poblacíon = cliente.Poblacion,
-                    Telefono = cliente.Telefono,
-                    NombreFoto = cliente.Foto,
-                    UsuarioID = cliente.Id_Cliente
-                },
-                Orders = orders
-            };
-            return View(model);
+                    Profile = new ProfileViewModel
+                    {
+                        Nombre = cliente.Nombre,
+                        Apellidos = cliente.Apellidos,
+                        Nick = cliente.Nick,
+                        Contraseña = usuario.Contraseña,
+                        DNI = cliente.DNI_Cliente,
+                        Email = cliente.Email,
+                        FechaNacimiento = cliente.Fecha_Nacimiento,
+                        Direccion = cliente.Direccion,
+                        Poblacíon = cliente.Poblacion,
+                        Telefono = cliente.Telefono,
+                        NombreFoto = cliente.Foto,
+                        UsuarioID = cliente.Id_Cliente
+                    },
+                    Orders = orders
+                };
+                return View(model);
+            }
+            else if (User.IsInRole(KoalaRoles.UserAdmin))
+            {
+                return View("Admin");
+            }
+            return View();
         }
 
         [HttpPost]
