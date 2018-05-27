@@ -119,7 +119,85 @@ namespace Koala.Controllers
             }
             else if (User.IsInRole(KoalaRoles.UserAdmin))
             {
-                return View("Admin");
+                var resultadoClientes = new List<ClientsViewModel>();
+                var resultadoPedidos = new List<OrderViewModel>();
+
+                var clientes = await _db.Clientes.ToListAsync();
+                var pedidos = await _db.Pedidos.Include(p => p.Clientes)
+                     .Include(l => l.Línea_Pedido).ToListAsync();
+                var productos = await _db.Productos.FirstOrDefaultAsync();
+                var usuario = await base.GetUser();
+                var administrador = await _db.Administradores.Where(a => a.DNI_Admin == usuario.DNI)
+                    .FirstOrDefaultAsync();
+
+                foreach (var item in clientes)
+                {
+                    var client = new ClientsViewModel
+                    {
+                        ID = item.Id_Cliente,
+                        Nombre = item.Nombre,
+                        Apellidos = item.Apellidos,
+                        NickCliente = item.Nick,
+                        DNI = item.DNI_Cliente,
+                        Telefono = item.Telefono,
+                        Email = item.Email,
+                        Direccion = item.Direccion,
+                        Poblacion = item.Poblacion,
+                        FechaNac = item.Fecha_Nacimiento,
+                        Estado = item.Estado
+                    };
+                    resultadoClientes.Add(client);
+                }
+
+                foreach (var item in pedidos)
+                {
+                    var order = new OrderViewModel
+                    {
+                        NumPedido = item.Id_Pedido,
+                        Cliente = item.Clientes.Nick,
+                        Descripcion = "",
+                        TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio),
+                        FechaPedido = item.Fecha_Pedido,
+                    };
+                    if (item.Confirmado.HasValue)
+                    {
+                        order.FechaConfirmado = item.Confirmado.Value;
+                        order.Estado = OrderViewModel.EstadoPedido.Confirmado;
+                    }
+                    if (item.Cobrado.HasValue)
+                    {
+                        order.FechaPagado = item.Cobrado.Value;
+                        order.Estado = OrderViewModel.EstadoPedido.Pagado;
+                    }
+                    if (item.Enviado.HasValue)
+                    {
+                        order.FechaEnviado = item.Enviado.Value;
+                        order.Estado = OrderViewModel.EstadoPedido.Enviado;
+                    }
+                    if (item.Recibido.HasValue)
+                    {
+                        order.FechaRecibido = item.Recibido.Value;
+                        order.Estado = OrderViewModel.EstadoPedido.Recibido;
+                    }
+                    string desc = string.Empty;
+                    foreach (var linea in item.Línea_Pedido)
+                    {
+                        if (linea.Productos != null)
+                        {
+                            desc += linea.Productos.Nombre + ", ";
+                        }
+                    }
+                    order.Descripcion = desc;
+                    resultadoPedidos.Add(order);
+                }
+
+                var model = new ManageViewModel
+                {
+                    Orders = resultadoPedidos,
+                    Clients = resultadoClientes
+                };
+
+                return View("Admin", model);
             }
             return View();
         }
@@ -162,73 +240,6 @@ namespace Koala.Controllers
             }
             return View(pedido);
         }
-
-        // GET: /Manage/Admin
-        public async Task<ActionResult> Admin()
-        {
-            var orders = new List<OrderViewModel>();
-
-            var pedidos = await _db.Pedidos.Include(p => p.Clientes)
-                 .Include(l => l.Línea_Pedido).ToListAsync();
-            var clientes = await _db.Clientes.FirstOrDefaultAsync();
-            var productos = await _db.Productos.FirstOrDefaultAsync();
-            var usuario = await base.GetUser();
-            var administrador = await _db.Administradores.Where(a => a.DNI_Admin == usuario.DNI)
-                .FirstOrDefaultAsync();
-
-            foreach (var item in pedidos)
-            {
-                var order = new OrderViewModel
-                {
-                    Descripcion = "",
-                    NumArticulos = item.Línea_Pedido.Count(),
-                    NumPedido = item.Id_Pedido,
-                    TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio),
-                    FechaPedido = item.Fecha_Pedido,
-                };
-                if (item.Confirmado.HasValue)
-                {
-                    order.FechaConfirmado = item.Confirmado.Value;
-                    order.Estado = OrderViewModel.EstadoPedido.Confirmado;
-                }
-                if (item.Cobrado.HasValue)
-                {
-                    order.FechaPagado = item.Cobrado.Value;
-                    order.Estado = OrderViewModel.EstadoPedido.Pagado;
-                }
-                if (item.Enviado.HasValue)
-                {
-                    order.FechaEnviado = item.Enviado.Value;
-                    order.Estado = OrderViewModel.EstadoPedido.Enviado;
-                }
-                if (item.Recibido.HasValue)
-                {
-                    order.FechaRecibido = item.Recibido.Value;
-                    order.Estado = OrderViewModel.EstadoPedido.Recibido;
-                }
-                string desc = string.Empty;
-                foreach (var linea in item.Línea_Pedido)
-                {
-                    if (linea.Productos != null)
-                    {
-                        desc += linea.Productos.Nombre + ", ";
-                    }
-                }
-                order.Descripcion = desc;
-                orders.Add(order);
-            }
-
-            var model = new ManageViewModel
-            {
-                Profile = new ProfileViewModel
-                {
-                    Nick = clientes.Nick,
-                },
-                Orders = orders
-            };
-            return View(model);
-        }
-        //
 
         // POST: /Manage/RemoveLogin
         [HttpPost]

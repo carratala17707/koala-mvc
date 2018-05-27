@@ -12,6 +12,7 @@ namespace Koala.Models
     {
         public ProfileViewModel Profile { get; set; }
         public List<OrderViewModel> Orders { get; set; }
+        public List<ClientsViewModel> Clients { get; set; }
         //public bool HasPassword { get; set; }
         //public IList<UserLoginInfo> Logins { get; set; }
         //public string PhoneNumber { get; set; }
@@ -19,9 +20,25 @@ namespace Koala.Models
         //public bool BrowserRemembered { get; set; }
     }
 
+    public class ClientsViewModel
+    {
+        public int ID { get; set; }
+        public string DNI { get; set; }
+        public string Nombre { get; set; }
+        public string Apellidos { get; set; }
+        public string Estado { get; set; }
+        public string Telefono { get; set; }
+        public string Email { get; set; }
+        public string Direccion { get; set; }
+        public string Poblacion { get; set; }
+        public string NickCliente { get; set; }
+        public System.DateTime FechaNac { get; set; }
+    }
+
     public class OrderViewModel
     {
         public int NumPedido { get; set; }
+        public string Cliente { get; set; }
         public System.DateTime FechaPedido { get; set; }
         public System.DateTime FechaConfirmado { get; set; }
         public System.DateTime FechaPagado { get; set; }

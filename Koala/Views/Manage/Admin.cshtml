@@ -6,7 +6,6 @@
 
 <h2 class="page-header">@ViewBag.Title</h2>
 
-<p class="text-success">@ViewBag.StatusMessage</p>
 <div>
     <ul class="nav nav-tabs">
         <li class="active"><a href="#perfil" data-toggle="tab">Ventas</a></li>
@@ -19,11 +18,11 @@
         <div class="tab-pane fade active in" id="perfil">
             <div class="row" style="margin-top: 35px;">
                 <img class="center-block" src="~/Content/Imagenes/totcolap.png" />
-                <br/>
+                <br />
                 <img class="center-block" src="~/Content/Imagenes/grafica.jpg" />
             </div>
         </div>
-        <div class="tab-pane fade active in" id="clientes">
+        <div class="tab-pane fade" id="clientes">
             <div class="row" style="margin-top: 35px;">
                 <table class="table">
                     <tr>
@@ -31,13 +30,16 @@
                             ID
                         </th>
                         <th>
-                            DNI
-                        </th>
-                        <th>
                             Nombre
                         </th>
                         <th>
                             Apellidos
+                        </th>
+                        <th>
+                            Nick
+                        </th>
+                        <th>
+                            DNI
                         </th>
                         <th>
                             Estado
@@ -55,143 +57,139 @@
                             Población
                         </th>
                         <th>
-                            Nick
-                        </th>
-                        <th>
                             Fecha de nacimiento
                         </th>
                     </tr>
 
-                @foreach (var item in Model.Clientes)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NumPedido)
-                        </td>
-                        <td style="text-align:center;">
-                            @Html.DisplayFor(modelItem => item.NumArticulos)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Descripcion)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValuePedido = item.FechaPedido.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValuePedido)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueConfirmado = item.FechaConfirmado.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueConfirmado)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueEnviado = item.FechaEnviado.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueEnviado)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueRecibido = item.FechaRecibido.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueRecibido)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TotalPrecio) €
-                        </td>
-                    </tr>
-                 }
+                    @foreach (var item in Model.Clients)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Apellidos)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NickCliente)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DNI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Telefono)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Direccion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Poblacion)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValueFechaNac = item.FechaNac.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValueFechaNac)
+                            </td>
+                        </tr>
+                    }
                 </table>
             </div>
         </div>
         <div class="tab-pane fade" id="pedidos">
             <div class="row" style="margin-top: 35px;">
-                @*<table class="table">
-                    <tr>
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            Num. Artículos
-                        </th>
-                        <th>
-                            Productos
-                        </th>
-                        <th>
-                            Fecha pedido
-                        </th>
-                        <th>
-                            Fecha confirmado
-                        </th>
-                        <th>
-                            Fecha enviado
-                        </th>
-                        <th>
-                            Fecha recibido
-                        </th>
-                        <th>
-                            Total precio
-                        </th>
-                        <th></th>
-                    </tr>
+                <table class="table">
+                        <tr>
+                            <th>
+                                Núm. Pedido
+                            </th>
+                            <th>
+                                Cliente
+                            </th>
+                            <th>
+                                Productos
+                            </th>
+                            <th>
+                                Fecha pedido
+                            </th>
+                            <th>
+                                Fecha confirmado
+                            </th>
+                            <th>
+                                Fecha enviado
+                            </th>
+                            <th>
+                                Fecha recibido
+                            </th>
+                            <th>
+                                Total precio
+                            </th>
+                            <th></th>
+                        </tr>
 
-                @foreach (var item in Model.Orders)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NumPedido)
-                        </td>
-                        <td style="text-align:center;">
-                            @Html.DisplayFor(modelItem => item.NumArticulos)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Descripcion)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValuePedido = item.FechaPedido.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValuePedido)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueConfirmado = item.FechaConfirmado.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueConfirmado)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueEnviado = item.FechaEnviado.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueEnviado)
-                        </td>
-                        <td>
-                            @{
-                                string parameterValueRecibido = item.FechaRecibido.ToShortDateString();
-                            }
-                            @Html.DisplayFor(modelItem => parameterValueRecibido)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TotalPrecio) €
-                        </td>
-                    </tr>
-                 }
-                </table>*@
+                    @foreach (var item in Model.Orders)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumPedido)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cliente)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValuePedido = item.FechaPedido.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValuePedido)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValueConfirmado = item.FechaConfirmado.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValueConfirmado)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValueEnviado = item.FechaEnviado.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValueEnviado)
+                            </td>
+                            <td>
+                                @{
+                                    string parameterValueRecibido = item.FechaRecibido.ToShortDateString();
+                                }
+                                @Html.DisplayFor(modelItem => parameterValueRecibido)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalPrecio) €
+                            </td>
+                        </tr>
+                     }
+                    </table>
             </div>
-         </div>
-         <div class="tab-pane fade active in" id="productos">
+        </div>
+        <div class="tab-pane fade" id="productos">
             <div class="row" style="margin-top: 35px;">
 
 
             </div>
-         </div>
-         <div class="tab-pane fade active in" id="registro">
+        </div>
+        <div class="tab-pane fade" id="registro">
             <div class="row" style="margin-top: 35px;">
 
             </div>
-         </div>
+        </div>
     </div>
 </div>
-
