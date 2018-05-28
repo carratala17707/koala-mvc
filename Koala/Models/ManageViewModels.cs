@@ -13,11 +13,27 @@ namespace Koala.Models
         public ProfileViewModel Profile { get; set; }
         public List<OrderViewModel> Orders { get; set; }
         public List<ClientsViewModel> Clients { get; set; }
+        public List<ProductsViewModel> Products { get; set; }
         //public bool HasPassword { get; set; }
         //public IList<UserLoginInfo> Logins { get; set; }
         //public string PhoneNumber { get; set; }
         //public bool TwoFactor { get; set; }
         //public bool BrowserRemembered { get; set; }
+    }
+
+    public class ProductsViewModel
+    {
+        public int ID { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public decimal Precio { get; set; }
+        public string Tipo { get; set; }
+        public string Foto { get; set; }
+        [Display(Name = "Foto")]
+        [HttpPostedFileExtensions(Extensions = "jpg,jpeg,png,bmp", ErrorMessage = "Formato de fichero inválido.")]
+        public HttpPostedFileBase FotoAttachment { get; set; }
+        public double Descuento { get; set; }
+        public bool Escaparate { get; set; }
     }
 
     public class ClientsViewModel

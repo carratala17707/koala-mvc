@@ -121,11 +121,12 @@ namespace Koala.Controllers
             {
                 var resultadoClientes = new List<ClientsViewModel>();
                 var resultadoPedidos = new List<OrderViewModel>();
+                var resultadoProductos = new List<ProductsViewModel>();
 
                 var clientes = await _db.Clientes.ToListAsync();
                 var pedidos = await _db.Pedidos.Include(p => p.Clientes)
                      .Include(l => l.Línea_Pedido).ToListAsync();
-                var productos = await _db.Productos.FirstOrDefaultAsync();
+                var productos = await _db.Productos.ToListAsync();
                 var usuario = await base.GetUser();
                 var administrador = await _db.Administradores.Where(a => a.DNI_Admin == usuario.DNI)
                     .FirstOrDefaultAsync();
@@ -191,10 +192,27 @@ namespace Koala.Controllers
                     resultadoPedidos.Add(order);
                 }
 
+                foreach (var item in productos)
+                {
+                    var product = new ProductsViewModel
+                    {
+                        ID = item.Id_Producto,
+                        Nombre = item.Nombre,
+                        Descripcion = item.Descripcion,
+                        Precio = item.Precio,
+                        Tipo = item.Tipo,
+                        Foto = item.Foto,
+                        Descuento = item.Descuento,
+                        Escaparate = item.Escaparate
+                    };
+                    resultadoProductos.Add(product);
+                }
+
                 var model = new ManageViewModel
                 {
                     Orders = resultadoPedidos,
-                    Clients = resultadoClientes
+                    Clients = resultadoClientes,
+                    Products = resultadoProductos
                 };
 
                 return View("Admin", model);
@@ -223,6 +241,90 @@ namespace Koala.Controllers
                 await _db.SaveChangesAsync();
             }
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: Productos/Create
+        public ActionResult CreateProduct()
+        {
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion");
+            return View();
+        }
+
+        // POST: Productos/Create
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
+        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateProduct([Bind(Include = "Id_Producto,Nombre,Descripcion,Precio,Tipo,Foto,Descuento,Escaparate")] Productos productos)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Productos.Add(productos);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
+            return View(productos);
+        }
+
+        // GET: Productos/Edit/5
+        public async Task<ActionResult> EditProduct(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Productos productos = await _db.Productos.FindAsync(id);
+            if (productos == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
+            return View(productos);
+        }
+
+        // POST: Productos/Edit/5
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
+        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditProduct([Bind(Include = "Id_Producto,Nombre,Descripcion,Precio,Tipo,Foto,Descuento,Escaparate")] Productos productos)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Entry(productos).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
+            return View(productos);
+        }
+
+        // GET: Productos/Delete/5
+        public async Task<ActionResult> DeleteProduct(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Productos productos = await _db.Productos.FindAsync(id);
+            if (productos == null)
+            {
+                return HttpNotFound();
+            }
+            return View(productos);
+        }
+
+        // POST: Productos/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            Productos productos = await _db.Productos.FindAsync(id);
+            _db.Productos.Remove(productos);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: /Manage/OrderDetails/id
