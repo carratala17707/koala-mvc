@@ -98,6 +98,9 @@ namespace Koala.Models
         [Display(Name = "Dirección")]
         public string Direccion { get; set; }
         [Required]
+        [Display(Name = "Estado")]
+        public EstadoCliente Estado { get; set; }
+        [Required]
         [Display(Name = "Población")]
         public string Poblacíon { get; set; }
         [Required]
@@ -112,6 +115,56 @@ namespace Koala.Models
         [HttpPostedFileExtensions(Extensions = "jpg,jpeg,png,bmp", ErrorMessage = "Formato de fichero inválido.")]
         public HttpPostedFileBase FotoAttachment { get; set; }
         public int UsuarioID { get; set; }
+    }
+
+    public enum EstadoCliente
+    {
+        Activo, Inactivo, Amonestado
+    }
+
+    public class ClientViewModel
+    {
+        [Required]
+        [Display(Name = "Nombre")]
+        public string Nombre { get; set; }
+        [Required]
+        [Display(Name = "Apellidos")]
+        public string Apellidos { get; set; }
+        [Required]
+        [Display(Name = "Nick")]
+        public string Nick { get; set; }
+        [Required]
+        [Display(Name = "DNI")]
+        public string DNI { get; set; }
+        [Required]
+        [Display(Name = "Teléfono")]
+        [DataType(DataType.PhoneNumber)]
+        public string Telefono { get; set; }
+        [Required]
+        [Display(Name = "Dirección")]
+        public string Direccion { get; set; }
+        [Required]
+        [Display(Name = "Estado")]
+        public EstadoCliente Estado { get; set; }
+        [Required]
+        [Display(Name = "Población")]
+        public string Poblacíon { get; set; }
+        [Required]
+        [Display(Name = "Fecha de nacimiento")]
+        public System.DateTime FechaNacimiento { get; set; }
+        [Required]
+        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+        public int UsuarioID { get; set; }
+
+        public IEnumerable<System.Web.Mvc.SelectListItem> Estados { get; set; }
+        public string DescripcionEstado { get; set; }
+
+        public enum EstadoCliente
+        {
+            Activo, Inactivo, Amonestado
+        }
     }
 
     public class ManageLoginsViewModel

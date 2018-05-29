@@ -63,6 +63,7 @@ namespace Koala.Models
         public bool RememberMe { get; set; }
     }
 
+    //Registro cliente
     public class RegisterViewModel
     {
         [Required]
@@ -112,6 +113,42 @@ namespace Koala.Models
         [Required]
         [Display(Name = "Población")]
         public string City { get; set; }
+    }
+
+    //Registro admin
+    public class RegisterAdminViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contraseña")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar contraseña")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Nombre")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Apellidos")]
+        public string Surname { get; set; }
+
+        [Required]
+        [Display(Name = "Nick")]
+        public string Nick { get; set; }
+
+        [Required]
+        [Display(Name = "DNI")]
+        public string DNI { get; set; }
     }
 
     public class ResetPasswordViewModel

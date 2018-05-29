@@ -4,7 +4,21 @@
     ViewBag.Title = "Perfil de administrador";
 }
 
-<h2 class="page-header">@ViewBag.Title</h2>
+@if (User.IsInRole(Koala.Models.KoalaRoles.UserCliente))
+{
+    <h2 class="page-header">@ViewBag.Title</h2>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-10">
+            <h2 class="page-header">@ViewBag.Title</h2>
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-primary btn-sm" href="@Url.Action("RegisterAdmin", "Account")" style="margin-top: 30px;">Crear administrador</a>
+        </div>
+    </div>
+}
 
 <div>
     <ul class="nav nav-tabs">
@@ -12,7 +26,6 @@
         <li><a href="#clientes" data-toggle="tab">Gestión de clientes</a></li>
         <li><a href="#pedidos" data-toggle="tab">Gestión de pedidos</a></li>
         <li><a href="#productos" data-toggle="tab">Gestión de productos</a></li>
-        <li><a href="#registro" data-toggle="tab">Registro de admins</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in" id="perfil">
@@ -59,6 +72,7 @@
                         <th>
                             Fecha de nacimiento
                         </th>
+                        <th></th>
                     </tr>
 
                     @foreach (var item in Model.Clients)
@@ -99,6 +113,9 @@
                                     string parameterValueFechaNac = item.FechaNac.ToShortDateString();
                                 }
                                 @Html.DisplayFor(modelItem => parameterValueFechaNac)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "EditClient", new { id = item.ID }) 
                             </td>
                         </tr>
                     }
@@ -249,11 +266,6 @@
                         </tr>
                     }
                 </table>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="registro">
-            <div class="row" style="margin-top: 35px;">
-
             </div>
         </div>
     </div>

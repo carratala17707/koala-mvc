@@ -121,8 +121,8 @@ namespace Koala.Controllers
                     return View(model);
             }
         }
-
         //
+
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -189,14 +189,13 @@ namespace Koala.Controllers
                         Telefono = model.Phone,
                         Email = model.Email,
                         Nick = model.Nick,
-                        Estado = EstadosCliente.Activo.ToString(),
+                        Estado = EstadoCliente.Activo.ToString(),
                         Foto = "koala.png"
                     });
                     await _db.SaveChangesAsync();
                 }
 
                 var manager = new IdentityManager();
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 await manager.CreateRoleAsync(KoalaRoles.UserCliente);
                 await manager.AddUserToRoleAsync(user.Id, KoalaRoles.UserCliente);
 
@@ -214,8 +213,103 @@ namespace Koala.Controllers
                 Result = result
             };
         }
-
         //
+
+        // GET: /Account/RegisterAdmin
+        [AllowAnonymous]
+        public ActionResult RegisterAdmin()
+        {
+            return View();
+        }
+
+        // POST: /Account/RegisterAdmin
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterAdmin(RegisterAdminViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var createResult = await CreateAdminUser(model);
+                if (createResult.Success)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    AddErrors(createResult.Result);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        class AdminUserResult
+        {
+            public IdentityResult Result { get; internal set; }
+            public bool Success { get; internal set; }
+        }
+
+        private async Task<AdminUserResult> CreateAdminUser(RegisterAdminViewModel model)
+        {
+            bool success = false;
+            var user = new ApplicationUser { UserName = model.Nick, Email = model.Email };
+            var result = await UserManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                var usuario = await _db.Usuarios.FirstOrDefaultAsync(u => u.Nick == model.Nick);
+                if (usuario == null)
+                {
+                    _db.Usuarios.Add(new Usuarios
+                    {
+                        Contraseña = model.Password,
+                        DNI = model.DNI,
+                        Nick = model.Nick,
+                        Nombre = model.Name,
+                        Rol = "A"
+                    });
+                    _db.Administradores.Add(new Administradores
+                    {
+                        Nombre = model.Name,
+                        Apellidos = model.Surname,
+                        DNI_Admin = model.DNI,
+                        Email = model.Email,
+                        Nick = model.Nick,
+                        Foto = "koala.png"
+                    });
+
+                    try
+                    {
+                        await _db.SaveChangesAsync();
+                    }
+                    catch (System.Data.Entity.Validation.DbEntityValidationException e)
+                    {
+                        string msg = Helpers.Util.ValidationErrors(e);
+                        throw;
+                    }
+                }
+
+                var manager = new IdentityManager();
+                await manager.CreateRoleAsync(KoalaRoles.UserAdmin);
+                await manager.AddUserToRoleAsync(user.Id, KoalaRoles.UserAdmin);
+
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                success = true;
+            }
+            return new AdminUserResult
+            {
+                Success = success,
+                Result = result
+            };
+        }
+        //
+
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)

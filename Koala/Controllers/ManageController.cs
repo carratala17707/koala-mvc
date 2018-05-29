@@ -220,6 +220,7 @@ namespace Koala.Controllers
             return View();
         }
 
+        //EditUser de clientes
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(ManageViewModel model)
@@ -241,6 +242,89 @@ namespace Koala.Controllers
                 await _db.SaveChangesAsync();
             }
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: EditClient de Admin
+        public async Task<ActionResult> EditClient(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Clientes cliente = await _db.Clientes.FindAsync(id);
+            if (cliente == null)
+            {
+                return HttpNotFound();
+            }
+            var model = new ClientViewModel
+            {
+                Nombre = cliente.Nombre,
+                Apellidos = cliente.Apellidos,
+                Nick = cliente.Nick,
+                DNI = cliente.DNI_Cliente,
+                Direccion = cliente.Direccion,
+                Email = cliente.Email,
+                Telefono = cliente.Telefono,
+                Poblacíon = cliente.Poblacion,
+                FechaNacimiento = cliente.Fecha_Nacimiento,
+                UsuarioID = cliente.Id_Cliente
+            };
+            model.Estados = GetEstadosCliente(cliente);
+            return View(model);
+        }
+
+        private static List<SelectListItem> GetEstadosCliente(Clientes cliente)
+        {
+            List<SelectListItem> estados = new List<SelectListItem>();
+            estados.Add(new SelectListItem
+            {
+                Value = EstadoCliente.Activo.ToString(),
+                Text = EstadoCliente.Activo.ToString(),
+                Selected = EstadoCliente.Activo.ToString() == cliente.Estado
+            });
+            estados.Add(new SelectListItem
+            {
+                Value = EstadoCliente.Amonestado.ToString(),
+                Text = EstadoCliente.Amonestado.ToString(),
+                Selected = EstadoCliente.Amonestado.ToString() == cliente.Estado
+            });
+            estados.Add(new SelectListItem
+            {
+                Value = EstadoCliente.Inactivo.ToString(),
+                Text = EstadoCliente.Inactivo.ToString(),
+                Selected = EstadoCliente.Inactivo.ToString() == cliente.Estado
+            });
+            return estados;
+        }
+
+        //POST:EditClient de Admin
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditClient(ClientViewModel profile)
+        {
+            if (ModelState.IsValid)
+            {
+                var usuario = await _db.Clientes.Where(c => c.Id_Cliente == profile.UsuarioID)
+                    .FirstOrDefaultAsync();
+                if (usuario != null)
+                {
+                    usuario.Nombre = profile.Nombre;
+                    usuario.Apellidos = profile.Apellidos;
+                    usuario.Direccion = profile.Direccion;
+                    usuario.Email = profile.Email;
+                    usuario.Fecha_Nacimiento = profile.FechaNacimiento;
+                    usuario.Telefono = profile.Telefono;
+                    usuario.Poblacion = profile.Poblacíon;
+                    usuario.Estado = profile.DescripcionEstado;
+
+                    _db.Entry(usuario).State = EntityState.Modified;
+                    await _db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            Clientes cliente = await _db.Clientes.FindAsync(profile.UsuarioID);
+            profile.Estados = GetEstadosCliente(cliente);
+            return View(profile);
         }
 
         // GET: Productos/Create

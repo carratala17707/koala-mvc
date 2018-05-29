@@ -220,6 +220,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HttpPostedFileExtensionsAttribute.cs" />
+    <Compile Include="Helpers\Util.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Administradores.cs">
       <DependentUpon>KoalaModel.tt</DependentUpon>
@@ -227,7 +228,6 @@
     <Compile Include="Models\Clientes.cs">
       <DependentUpon>KoalaModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\EstadosCliente.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\KoalaModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -452,10 +452,11 @@
     <Content Include="Views\Productos\CreateProduct.cshtml" />
     <Content Include="Views\Manage\DeleteProduct.cshtml" />
     <Content Include="Views\Manage\EditProduct.cshtml" />
+    <Content Include="Views\Account\RegisterAdmin.cshtml" />
+    <Content Include="Views\Manage\EditClient.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
