@@ -13,7 +13,7 @@ namespace Koala.Models
         public ProfileViewModel Profile { get; set; }
         public List<OrderViewModel> Orders { get; set; }
         public List<ClientsViewModel> Clients { get; set; }
-        public List<ProductsViewModel> Products { get; set; }
+        public List<ProductViewModel> Products { get; set; }
         //public bool HasPassword { get; set; }
         //public IList<UserLoginInfo> Logins { get; set; }
         //public string PhoneNumber { get; set; }
@@ -21,7 +21,7 @@ namespace Koala.Models
         //public bool BrowserRemembered { get; set; }
     }
 
-    public class ProductsViewModel
+    public class ProductViewModel
     {
         public int ID { get; set; }
         public string Nombre { get; set; }
@@ -48,17 +48,29 @@ namespace Koala.Models
         public string Direccion { get; set; }
         public string Poblacion { get; set; }
         public string NickCliente { get; set; }
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaNac { get; set; }
     }
 
     public class OrderViewModel
     {
         public int NumPedido { get; set; }
-        public string Cliente { get; set; }
+        public int Cliente { get; set; }
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaPedido { get; set; }
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaConfirmado { get; set; }
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaPagado { get; set; }
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaEnviado { get; set; }
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaRecibido { get; set; }
         public decimal TotalPrecio { get; set; }
         public string Descripcion { get; set; }
@@ -104,6 +116,8 @@ namespace Koala.Models
         [Display(Name = "Población")]
         public string Poblacíon { get; set; }
         [Required]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         [Display(Name = "Fecha de nacimiento")]
         public System.DateTime FechaNacimiento { get; set; }
         [Required]
@@ -151,6 +165,8 @@ namespace Koala.Models
         public string Poblacíon { get; set; }
         [Required]
         [Display(Name = "Fecha de nacimiento")]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaNacimiento { get; set; }
         [Required]
         [Display(Name = "Email")]

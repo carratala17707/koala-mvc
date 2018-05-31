@@ -109,10 +109,7 @@ else
                                 @Html.DisplayFor(modelItem => item.Poblacion)
                             </td>
                             <td>
-                                @{
-                                    string parameterValueFechaNac = item.FechaNac.ToShortDateString();
-                                }
-                                @Html.DisplayFor(modelItem => parameterValueFechaNac)
+                                @Html.DisplayFor(modelItem => item.FechaNac)
                             </td>
                             <td>
                                 @Html.ActionLink("Editar", "EditClient", new { id = item.ID }) 
@@ -166,31 +163,22 @@ else
                                 @Html.DisplayFor(modelItem => item.Descripcion)
                             </td>
                             <td>
-                                @{
-                                    string parameterValuePedido = item.FechaPedido.ToShortDateString();
-                                }
-                                @Html.DisplayFor(modelItem => parameterValuePedido)
+                                @Html.DisplayFor(modelItem => item.FechaPedido)
                             </td>
                             <td>
-                                @{
-                                    string parameterValueConfirmado = item.FechaConfirmado.ToShortDateString();
-                                }
-                                @Html.DisplayFor(modelItem => parameterValueConfirmado)
+                                @Html.DisplayFor(modelItem => item.FechaConfirmado)
                             </td>
                             <td>
-                                @{
-                                    string parameterValueEnviado = item.FechaEnviado.ToShortDateString();
-                                }
-                                @Html.DisplayFor(modelItem => parameterValueEnviado)
+                                @Html.DisplayFor(modelItem => item.FechaEnviado)
                             </td>
                             <td>
-                                @{
-                                    string parameterValueRecibido = item.FechaRecibido.ToShortDateString();
-                                }
-                                @Html.DisplayFor(modelItem => parameterValueRecibido)
+                                @Html.DisplayFor(modelItem => item.FechaRecibido)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.TotalPrecio) €
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "EditOrder", new { id = item.NumPedido })
                             </td>
                         </tr>
                      }

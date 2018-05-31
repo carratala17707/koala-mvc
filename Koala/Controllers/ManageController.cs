@@ -121,7 +121,7 @@ namespace Koala.Controllers
             {
                 var resultadoClientes = new List<ClientsViewModel>();
                 var resultadoPedidos = new List<OrderViewModel>();
-                var resultadoProductos = new List<ProductsViewModel>();
+                var resultadoProductos = new List<ProductViewModel>();
 
                 var clientes = await _db.Clientes.ToListAsync();
                 var pedidos = await _db.Pedidos.Include(p => p.Clientes)
@@ -155,7 +155,7 @@ namespace Koala.Controllers
                     var order = new OrderViewModel
                     {
                         NumPedido = item.Id_Pedido,
-                        Cliente = item.Clientes.Nick,
+                        Cliente = item.Clientes.Id_Cliente,
                         Descripcion = "",
                         TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio),
                         FechaPedido = item.Fecha_Pedido,
@@ -194,7 +194,7 @@ namespace Koala.Controllers
 
                 foreach (var item in productos)
                 {
-                    var product = new ProductsViewModel
+                    var product = new ProductViewModel
                     {
                         ID = item.Id_Producto,
                         Nombre = item.Nombre,
@@ -310,6 +310,7 @@ namespace Koala.Controllers
                 {
                     usuario.Nombre = profile.Nombre;
                     usuario.Apellidos = profile.Apellidos;
+                    usuario.DNI_Cliente = profile.DNI;
                     usuario.Direccion = profile.Direccion;
                     usuario.Email = profile.Email;
                     usuario.Fecha_Nacimiento = profile.FechaNacimiento;
@@ -325,6 +326,67 @@ namespace Koala.Controllers
             Clientes cliente = await _db.Clientes.FindAsync(profile.UsuarioID);
             profile.Estados = GetEstadosCliente(cliente);
             return View(profile);
+        }
+
+        //GET: EDITORDER
+        // GET: EditClient de Admin
+        public async Task<ActionResult> EditOrder(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Pedidos pedido = await _db.Pedidos.FindAsync(id);
+            if (pedido == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new OrderViewModel
+            {
+                NumPedido = pedido.Id_Pedido,
+                Cliente = pedido.Cliente,
+                FechaPedido = pedido.Fecha_Pedido
+            };
+            if (pedido.Confirmado.HasValue)
+            {
+                model.FechaConfirmado = pedido.Confirmado.Value;
+            }
+            if (pedido.Recibido.HasValue)
+            {
+                model.FechaEnviado = pedido.Enviado.Value;
+            }
+            if (pedido.Recibido.HasValue)
+            {
+                model.FechaRecibido = pedido.Recibido.Value;
+            }
+            return View(model);
+        }
+
+        //POST EDITORDER
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditOrder(OrderViewModel order)
+        {
+            if (ModelState.IsValid)
+            {
+                var pedido = await _db.Pedidos.Where(p => p.Id_Pedido == order.NumPedido)
+                    .FirstOrDefaultAsync();
+                if (pedido != null)
+                {
+                    pedido.Cliente = order.Cliente;
+                    pedido.Fecha_Pedido = order.FechaPedido;
+                    pedido.Confirmado = order.FechaConfirmado;
+                    pedido.Enviado = order.FechaEnviado;
+                    pedido.Recibido = order.FechaRecibido;
+
+                    _db.Entry(pedido).State = EntityState.Modified;
+                    await _db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            Pedidos pedidos = await _db.Pedidos.FindAsync(order.NumPedido);
+            return View(order);
         }
 
         // GET: Productos/Create
@@ -352,7 +414,7 @@ namespace Koala.Controllers
             return View(productos);
         }
 
-        // GET: Productos/Edit/5
+        // GET: EditProduct
         public async Task<ActionResult> EditProduct(int? id)
         {
             if (id == null)
@@ -364,25 +426,51 @@ namespace Koala.Controllers
             {
                 return HttpNotFound();
             }
+
+            var model = new ProductViewModel
+            {
+                ID = productos.Id_Producto,
+                Nombre = productos.Nombre,
+                Descripcion = productos.Descripcion,
+                Precio = productos.Precio,
+                Tipo = productos.Tipo,
+                Foto = productos.Foto,
+                Descuento = productos.Descuento,
+                Escaparate = productos.Escaparate
+            };
             ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
-            return View(productos);
+            return View(model);
         }
 
-        // POST: Productos/Edit/5
+        // POST: EditProduct
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditProduct([Bind(Include = "Id_Producto,Nombre,Descripcion,Precio,Tipo,Foto,Descuento,Escaparate")] Productos productos)
+        public async Task<ActionResult> EditProduct(ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(productos).State = EntityState.Modified;
-                await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                var producto = await _db.Productos.Where(p => p.Id_Producto == product.ID)
+                    .FirstOrDefaultAsync();
+                if (product != null)
+                {
+                    producto.Id_Producto = product.ID;
+                    producto.Nombre = product.Nombre;
+                    producto.Descripcion = product.Descripcion;
+                    producto.Precio = product.Precio;
+                    producto.Tipo = product.Tipo;
+                    producto.Foto = product.Foto;
+                    producto.Descuento = product.Descuento;
+                    producto.Escaparate = product.Escaparate;
+
+                    _db.Entry(producto).State = EntityState.Modified;
+                    await _db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
-            return View(productos);
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", product.Tipo);
+            return View(product);
         }
 
         // GET: Productos/Delete/5
@@ -401,7 +489,7 @@ namespace Koala.Controllers
         }
 
         // POST: Productos/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteProduct")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

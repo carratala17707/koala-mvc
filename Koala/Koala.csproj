@@ -454,6 +454,7 @@
     <Content Include="Views\Manage\EditProduct.cshtml" />
     <Content Include="Views\Account\RegisterAdmin.cshtml" />
     <Content Include="Views\Manage\EditClient.cshtml" />
+    <Content Include="Views\Manage\EditOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

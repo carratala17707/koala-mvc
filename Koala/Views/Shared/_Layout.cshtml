@@ -36,11 +36,26 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav mr-auto">
-                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Nosotros", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Productos", "Catalogo", "Productos")</li>
-                    <li>@Html.ActionLink("Carrito", "Catalogo", "Productos")</li>
+                    @if (User.IsInRole(Koala.Models.KoalaRoles.UserCliente))
+                    {
+                        <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Nosotros", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+                        <li>@Html.ActionLink("Productos", "Catalogo", "Productos")</li>
+                        <li>@Html.ActionLink("Carrito", "Catalogo", "Productos")</li>
+                    }
+                    else if (User.IsInRole(Koala.Models.KoalaRoles.UserAdmin))
+                    {
+                        <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Nosotros", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+                        <li>@Html.ActionLink("Productos", "Catalogo", "Productos")</li>
+                    }
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
