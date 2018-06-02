@@ -125,6 +125,7 @@ namespace Koala.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         public string NombreFoto { get; set; }
+        public string RutaFoto { get; set; }
         [Display(Name = "Foto")]
         [HttpPostedFileExtensions(Extensions = "jpg,jpeg,png,bmp", ErrorMessage = "Formato de fichero inválido.")]
         public HttpPostedFileBase FotoAttachment { get; set; }

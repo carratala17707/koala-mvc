@@ -26,6 +26,7 @@ namespace Koala
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/Site.css"));
+            bundles.Add(new ScriptBundle("~/bundles/js").Include("~/Scripts/Site.js"));
         }
     }
 }

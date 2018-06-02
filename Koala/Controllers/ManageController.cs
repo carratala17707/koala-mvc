@@ -96,6 +96,12 @@ namespace Koala.Controllers
                     orders.Add(order);
                 }
 
+                var storage = new Persistence.PhotoStorage();
+                Uri uri = null;
+                if (await storage.Exists(cliente.Foto))
+                {
+                    uri = await storage.GetBlobUri(cliente.Foto);
+                }
                 var model = new ManageViewModel
                 {
                     Profile = new ProfileViewModel
@@ -111,7 +117,8 @@ namespace Koala.Controllers
                         Poblacíon = cliente.Poblacion,
                         Telefono = cliente.Telefono,
                         NombreFoto = cliente.Foto,
-                        UsuarioID = cliente.Id_Cliente
+                        UsuarioID = cliente.Id_Cliente,
+                        RutaFoto = uri != null ? uri.AbsoluteUri : null
                     },
                     Orders = orders
                 };
@@ -237,6 +244,11 @@ namespace Koala.Controllers
                 usuario.Fecha_Nacimiento = profile.FechaNacimiento;
                 usuario.Telefono = profile.Telefono;
                 usuario.Poblacion = profile.Poblacíon;
+                string nombreFoto = $"{System.Guid.NewGuid().ToString()}_{profile.NombreFoto}";
+                usuario.Foto = nombreFoto;
+
+                var storage = new Persistence.PhotoStorage();
+                await storage.UploadImage(profile.FotoAttachment.InputStream, nombreFoto);
 
                 _db.Entry(usuario).State = EntityState.Modified;
                 await _db.SaveChangesAsync();

@@ -97,23 +97,41 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <div class="col-md-9 col-lg-offset-3">
+                                    <div class="col-md-8 col-lg-offset-4">
                                         <div class="card avatar">
-                                            <img class="card-img-top"
-                                                 src="~/Content/Imagenes/@Model.Profile.NombreFoto" />
+                                            @if (Model.Profile != null)
+                                            {
+                                                if (string.IsNullOrEmpty(Model.Profile.RutaFoto))
+                                                {
+                                                    <img class="card-img-top" src="~/Content/Imagenes/koala.png" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="card-img-top" src="@Model.Profile.RutaFoto" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <img class="card-img-top" src="~/Content/Imagenes/koala.png" />
+                                            }
                                             <div class="card-block">
                                                <div class="input-group">
                                                     <span class="input-group-btn">
                                                         <span class="btn btn-default btn-file">
                                                             <span class="glyphicon glyphicon-folder-open"></span>&nbsp;Buscar archivo...
-                                                            @Html.TextBoxFor(m => m.Profile.FotoAttachment, new { type = "file", accept = "image/*" })
+                                                            @Html.TextBoxFor(m => m.Profile.FotoAttachment, new
+                                                            {
+                                                                type = "file",
+                                                                accept = "image/*",
+                                                                @class = "custom-file-input"
+                                                            })
                                                         </span>
                                                     </span>
                                                     @Html.TextBoxFor(m => m.Profile.NombreFoto, new
                                                     {
                                                         @class = "form-control text-right avatar-input",
                                                         @readonly = "",
-                                                        id = "logo-attachment-input"
+                                                        id = "attachment-input"
                                                     })
                                                 </div>
                                                 @Html.ValidationMessageFor(model => model.Profile.FotoAttachment, "", new { @class = "text-danger" })
@@ -233,7 +251,7 @@
                                 @Html.ActionLink("Detalle", "OrderDetails", new { id = item.NumPedido })
                             </td>
                         </tr>
-                                    }
+                    }
                 </table>
             </div>
         </div>
@@ -243,4 +261,3 @@
 <br />
 <br />
 <br />
-
