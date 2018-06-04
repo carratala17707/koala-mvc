@@ -220,7 +220,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PedidosController.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Models\Administradores.cs">
       <DependentUpon>KoalaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CartViewModel.cs" />
     <Compile Include="Models\Clientes.cs">
       <DependentUpon>KoalaModel.tt</DependentUpon>
     </Compile>
@@ -298,6 +301,8 @@
     <Content Include="Content\Imagenes\A7.jpg" />
     <Content Include="Content\Imagenes\A8.jpg" />
     <Content Include="Content\Imagenes\A9.jpg" />
+    <Content Include="Content\Imagenes\A98.jpg" />
+    <Content Include="Content\Imagenes\addcamara_añadir_13412.png" />
     <Content Include="Content\Imagenes\admin.png" />
     <Content Include="Content\Imagenes\alimentación.jpg" />
     <Content Include="Content\Imagenes\animalhome.png" />
@@ -406,7 +411,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\Site.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -466,6 +473,10 @@
     <Content Include="Views\Account\RegisterAdmin.cshtml" />
     <Content Include="Views\Manage\EditClient.cshtml" />
     <Content Include="Views\Manage\EditOrder.cshtml" />
+    <Content Include="Views\Error\Forbidden.cshtml" />
+    <Content Include="Views\Error\InternalServerError.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
+    <Content Include="Views\Carrito\Carrito.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

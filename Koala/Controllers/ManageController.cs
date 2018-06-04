@@ -208,7 +208,7 @@ namespace Koala.Controllers
                         Descripcion = item.Descripcion,
                         Precio = item.Precio,
                         Tipo = item.Tipo,
-                        Foto = item.Foto,
+                        NombreFoto = item.Foto,
                         Descuento = item.Descuento,
                         Escaparate = item.Escaparate
                     };
@@ -232,28 +232,36 @@ namespace Koala.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(ManageViewModel model)
         {
-            var profile = model.Profile;
-            var usuario = await _db.Clientes.Where(c => c.Id_Cliente == profile.UsuarioID)
-                .FirstOrDefaultAsync();
-            if (usuario != null)
+            if (ModelState.IsValid)
             {
-                usuario.Nombre = profile.Nombre;
-                usuario.Apellidos = profile.Apellidos;
-                usuario.Direccion = profile.Direccion;
-                usuario.Email = profile.Email;
-                usuario.Fecha_Nacimiento = profile.FechaNacimiento;
-                usuario.Telefono = profile.Telefono;
-                usuario.Poblacion = profile.Poblacíon;
-                string nombreFoto = $"{System.Guid.NewGuid().ToString()}_{profile.NombreFoto}";
-                usuario.Foto = nombreFoto;
+                var profile = model.Profile;
+                var usuario = await _db.Clientes.Where(c => c.Id_Cliente == profile.UsuarioID)
+                    .FirstOrDefaultAsync();
 
-                var storage = new Persistence.PhotoStorage();
-                await storage.UploadImage(profile.FotoAttachment.InputStream, nombreFoto);
+                if (usuario != null)
+                {
+                    usuario.Nombre = profile.Nombre;
+                    usuario.Apellidos = profile.Apellidos;
+                    usuario.Direccion = profile.Direccion;
+                    usuario.Email = profile.Email;
+                    usuario.Fecha_Nacimiento = profile.FechaNacimiento;
+                    usuario.Telefono = profile.Telefono;
+                    usuario.Poblacion = profile.Poblacíon;
+                    string nombreFoto = $"{System.Guid.NewGuid().ToString()}_{profile.NombreFoto}";
+                    usuario.Foto = nombreFoto;
 
-                _db.Entry(usuario).State = EntityState.Modified;
-                await _db.SaveChangesAsync();
+                    if (profile.FotoAttachment != null)
+                    {
+                        var storage = new Persistence.PhotoStorage();
+                        await storage.UploadImage(profile.FotoAttachment.InputStream, nombreFoto);
+                    }
+
+                    _db.Entry(usuario).State = EntityState.Modified;
+                    await _db.SaveChangesAsync();
+                }
+                return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+            return View(model);
         }
 
         // GET: EditClient de Admin
@@ -386,7 +394,6 @@ namespace Koala.Controllers
                     .FirstOrDefaultAsync();
                 if (pedido != null)
                 {
-                    pedido.Cliente = order.Cliente;
                     pedido.Fecha_Pedido = order.FechaPedido;
                     pedido.Confirmado = order.FechaConfirmado;
                     pedido.Enviado = order.FechaEnviado;
@@ -413,17 +420,35 @@ namespace Koala.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateProduct([Bind(Include = "Id_Producto,Nombre,Descripcion,Precio,Tipo,Foto,Descuento,Escaparate")] Productos productos)
+        public async Task<ActionResult> CreateProduct(ProductViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _db.Productos.Add(productos);
+                if (model.FotoAttachment != null)
+                {
+                    string nombreFoto = $"{System.Guid.NewGuid().ToString()}_{model.NombreFoto}";
+                    var storage = new Persistence.PhotoStorage();
+                    await storage.UploadImage(model.FotoAttachment.InputStream, nombreFoto);
+                }
+
+                _db.Productos.Add(new Productos
+                {
+                    Id_Producto = model.ID,
+                    Nombre = model.Nombre,
+                    Descripcion = model.Descripcion,
+                    Precio = model.Precio,
+                    Tipo = model.Tipo,
+                    Descuento = model.Descuento,
+                    Foto = model.NombreFoto,
+                    Escaparate = model.Escaparate
+                });
+
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
-            return View(productos);
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", model.Tipo);
+            return View(model);
         }
 
         // GET: EditProduct
@@ -433,24 +458,32 @@ namespace Koala.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Productos productos = await _db.Productos.FindAsync(id);
-            if (productos == null)
+            Productos producto = await _db.Productos.FindAsync(id);
+            if (producto == null)
             {
                 return HttpNotFound();
             }
 
+            var storage = new Persistence.PhotoStorage();
+            Uri uri = null;
+            if (await storage.Exists(producto.Foto))
+            {
+                uri = await storage.GetBlobUri(producto.Foto);
+            }
+
             var model = new ProductViewModel
             {
-                ID = productos.Id_Producto,
-                Nombre = productos.Nombre,
-                Descripcion = productos.Descripcion,
-                Precio = productos.Precio,
-                Tipo = productos.Tipo,
-                Foto = productos.Foto,
-                Descuento = productos.Descuento,
-                Escaparate = productos.Escaparate
+                ID = producto.Id_Producto,
+                Nombre = producto.Nombre,
+                Descripcion = producto.Descripcion,
+                Precio = producto.Precio,
+                Tipo = producto.Tipo,
+                NombreFoto = producto.Foto,
+                RutaFoto = uri.AbsoluteUri,
+                Descuento = producto.Descuento,
+                Escaparate = producto.Escaparate
             };
-            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", productos.Tipo);
+            ViewBag.Tipo = new SelectList(_db.Tipo_Producto, "Id_Tipo", "Descripcion", producto.Tipo);
             return View(model);
         }
 
@@ -465,6 +498,7 @@ namespace Koala.Controllers
             {
                 var producto = await _db.Productos.Where(p => p.Id_Producto == product.ID)
                     .FirstOrDefaultAsync();
+
                 if (product != null)
                 {
                     producto.Id_Producto = product.ID;
@@ -472,9 +506,16 @@ namespace Koala.Controllers
                     producto.Descripcion = product.Descripcion;
                     producto.Precio = product.Precio;
                     producto.Tipo = product.Tipo;
-                    producto.Foto = product.Foto;
                     producto.Descuento = product.Descuento;
                     producto.Escaparate = product.Escaparate;
+                    string nombreFoto = $"{System.Guid.NewGuid().ToString()}_{product.NombreFoto}";
+                    producto.Foto = nombreFoto;
+
+                    if (product.FotoAttachment != null)
+                    {
+                        var storage = new Persistence.PhotoStorage();
+                        await storage.UploadImage(product.FotoAttachment.InputStream, nombreFoto);
+                    }
 
                     _db.Entry(producto).State = EntityState.Modified;
                     await _db.SaveChangesAsync();

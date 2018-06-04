@@ -8,7 +8,7 @@
 
 <h3>ID de pedido: @Model.NumPedido</h3>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("EditOrder", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     

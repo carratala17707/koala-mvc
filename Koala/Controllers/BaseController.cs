@@ -51,5 +51,25 @@ namespace Koala.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public string UserID
+        {
+            get
+            {
+                return User.Identity.GetUserId();
+            }
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            string controller = filterContext.RouteData.Values["controller"].ToString();
+            string action = filterContext.RouteData.Values["action"].ToString();
+            Exception ex = filterContext.Exception;
+            string innerEx = (ex.InnerException != null) ? ex.InnerException.ToString() : string.Empty;
+            HttpException httpEx = new HttpException(null, ex);
+            string error = $"C: {controller}. A: {action}.\nEx: {ex.ToString()}\nInnerEx: {innerEx}" +
+                $"\nUser: {UserID}\nHandled: {filterContext.ExceptionHandled}\nHttp code: {httpEx.GetHttpCode()}";
+            System.Diagnostics.Trace.TraceError(error);
+        }
     }
 }

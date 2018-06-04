@@ -1,0 +1,58 @@
+﻿@model Koala.Models.CartViewModel
+
+@{
+    ViewBag.Title = "Carrito";
+}
+
+<h2 class="page-header">Carrito</h2>
+
+<div class="row" style="margin-top: 35px;">
+    <table class="table">
+        <tr>
+            <th>
+                Nombre del producto
+            </th>
+            <th>
+                Cantidad
+            </th>
+            <th>
+                Descuento
+            </th>
+            <th>
+                Precio
+            </th>
+            <th>
+                Precio Total
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Cart)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreProducto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descuento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio) €
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio) €
+                </td>
+            </tr>
+        }
+    </table>
+    <p>
+        @Html.ActionLink("Volver", "Index")
+    </p>
+</div>
+<br />
+<br />
+<br />
+<br />
+

@@ -6,7 +6,7 @@
 
 <h2 class="page-header">Editar cliente</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("EditClient", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     

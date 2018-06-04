@@ -246,3 +246,27 @@ textarea {
         display: block;
     }
 
+.error-container {
+    margin-top: 4em;
+    margin-bottom: 4em;
+    text-align: center;
+}
+
+    .error-container .error-details {
+        margin-bottom: 1.5em;
+    }
+
+    .error-container h1 {
+        margin-bottom: 0.5em;
+        font-size: 120px;
+        line-height: 1em;
+    }
+
+    .error-container h2 {
+        margin-bottom: 0.75em;
+        font-size: 28px;
+    }
+
+    .error-container .error-actions a {
+        margin: 0 0.5em;
+    }

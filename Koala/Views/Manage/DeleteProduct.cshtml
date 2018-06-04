@@ -7,6 +7,7 @@
 <h2 class="page-header">Eliminar producto</h2>
 
 <h3>¿Está seguro de que desea eliminar este producto?</h3>
+<br />
 <div>
     <dl class="dl-horizontal col-md-12 col-md-offset-3">
         <dt>
@@ -34,14 +35,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Foto)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Foto)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Descuento)
         </dt>
 
@@ -66,7 +59,7 @@
         </dd>
 
     </dl>
-
+    <br/>
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 

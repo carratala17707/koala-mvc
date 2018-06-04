@@ -28,11 +28,12 @@ namespace Koala.Models
         public string Descripcion { get; set; }
         public decimal Precio { get; set; }
         public string Tipo { get; set; }
-        public string Foto { get; set; }
+        public double Descuento { get; set; }
+        public string NombreFoto { get; set; }
+        public string RutaFoto { get; set; }
         [Display(Name = "Foto")]
         [HttpPostedFileExtensions(Extensions = "jpg,jpeg,png,bmp", ErrorMessage = "Formato de fichero inválido.")]
         public HttpPostedFileBase FotoAttachment { get; set; }
-        public double Descuento { get; set; }
         public bool Escaparate { get; set; }
     }
 
@@ -97,7 +98,7 @@ namespace Koala.Models
         [Required]
         [StringLength(100, ErrorMessage = "La {0} debe ser al menos de {2} carácteres de longitud.", MinimumLength = 3)]
         [DataType(DataType.Password)]
-        [Display(Name = "Nueva contraseña")]
+        [Display(Name = "Contraseña")]
         public string Contraseña { get; set; }
         [Required]
         [Display(Name = "DNI")]
