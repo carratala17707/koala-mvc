@@ -33,5 +33,6 @@ namespace Koala.Models
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Tipo_Producto> Tipo_Producto { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
+        public virtual DbSet<Carrito> Carrito { get; set; }
     }
 }

@@ -20,6 +20,7 @@
         <AssociationConnector Association="Model.Línea_Pedido_fk1" />
         <AssociationConnector Association="Model.Productos_fk0" />
         <AssociationConnector Association="Model.Usuarios_fk0" />
+        <EntityTypeShape EntityType="Model.Carrito" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

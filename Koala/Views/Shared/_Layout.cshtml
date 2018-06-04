@@ -42,7 +42,7 @@
                         <li>@Html.ActionLink("Nosotros", "About", "Home")</li>
                         <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
                         <li>@Html.ActionLink("Productos", "Catalogo", "Productos")</li>
-                        <li>@Html.ActionLink("Carrito", "Carrito", "Cart")</li>
+                        <li>@Html.ActionLink("Carrito", "Index", "Cart")</li>
                     }
                     else if (User.IsInRole(Koala.Models.KoalaRoles.UserAdmin))
                     {

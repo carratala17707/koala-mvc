@@ -236,6 +236,9 @@
     <Compile Include="Models\Administradores.cs">
       <DependentUpon>KoalaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Carrito.cs">
+      <DependentUpon>KoalaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CartViewModel.cs" />
     <Compile Include="Models\Clientes.cs">
       <DependentUpon>KoalaModel.tt</DependentUpon>
@@ -476,7 +479,7 @@
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Error\InternalServerError.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
-    <Content Include="Views\Carrito\Carrito.cshtml" />
+    <Content Include="Views\Carrito\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
