@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Koala.Models.CartViewModel>
+
+@{
+    ViewBag.Title = "Carrito";
+}
+
+<h2 class="page-header">Carrito</h2>
+
+<div class="row" style="margin-top: 35px;">
+
+    @*@if (Model.lista != null && Model.lista.Count > 0)
+    {*@
+        <table class="table">
+            <tr>
+                <th>
+                    Nombre del producto
+                </th>
+                <th>
+                    Cantidad
+                </th>
+                <th>
+                    Descuento
+                </th>
+                <th>
+                    Precio
+                </th>
+                <th>
+                    Precio Total
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NombreProducto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cantidad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descuento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalPrecio) €
+                    </td>
+                </tr>
+            }
+        </table>
+    @*}
+    else
+    {
+        <h4 style="text-align:center;">No has añadido ningún producto al carrito.</h4>
+    }*@
+   
+    <p>
+        <a class="btn btn-success" href="@Url.Action("Catalogo", "Productos")">Continuar comprando</a>
+    </p>
+</div>
+<br />
+<br />
+<br />
+<br />
+

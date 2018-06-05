@@ -12,5 +12,6 @@ namespace Koala.Models
         public int Cantidad { get; set; }
         public decimal Precio { get; set; }
         public double Descuento { get; set; }
+        public decimal TotalPrecio { get; set; }
     }
 }

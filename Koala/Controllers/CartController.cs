@@ -26,6 +26,7 @@ namespace Koala.Controllers
             var productos = await _db.Productos.ToListAsync();
 
             List<CartViewModel> lista = new List<CartViewModel>();
+
             foreach (var item in listaCarrito)
             {
                 var producto = productos.First(p => p.Id_Producto == item.IdProducto);
@@ -36,10 +37,50 @@ namespace Koala.Controllers
                     IdProducto = item.IdProducto,
                     NombreProducto = producto.Nombre,
                     Descuento = producto.Descuento,
-                    Precio = producto.Precio
+                    Precio = producto.Precio,
+                    //TotalPrecio = producto.Precio.Sum(p => p.Precio)
                 });
             }
             return View(lista);
+        }
+
+        public async Task<ActionResult> AddProduct(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Productos producto = await _db.Productos.FindAsync(id);
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+
+            var usuario = await GetUser();
+            var cliente = await _db.Clientes.Where(c => c.DNI_Cliente == usuario.DNI).FirstOrDefaultAsync();
+            if (cliente == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var productoEnCarrito = await _db.Carrito.Where(c => c.IdProducto == id).FirstOrDefaultAsync();
+            if (productoEnCarrito != null)
+            {
+                productoEnCarrito.Cantidad++;
+                _db.Entry(productoEnCarrito).State = EntityState.Modified;
+            }
+            else
+            {
+                _db.Carrito.Add(new Carrito
+                {
+                    IdProducto = id.Value,
+                    Cantidad = 1,
+                    IdCliente = cliente.Id_Cliente
+                });
+            }
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }

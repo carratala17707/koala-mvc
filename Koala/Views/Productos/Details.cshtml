@@ -26,7 +26,10 @@
             <img style="height:50%; width:50%;" src="~/Content/Imagenes/@Model.Foto" />
             <br />
             <br />
-            <a href="~/Views/Carrito/Index.cshtml" class="btn btn-default">Añadir al carrito</a>
+            <a href="@Url.Action("AddProduct", "Cart", new { id = Model.Id_Producto })" class="btn btn-default">
+                Añadir al carrito
+            </a>
+            @*<a href="~/Views/Cart/Index.cshtml" class="btn btn-default">Añadir al carrito</a>*@
         </div>
     </div>
     <br />
@@ -36,3 +39,4 @@
     </p>
     <br />
     <br />
+</div>
