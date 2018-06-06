@@ -8,8 +8,8 @@
 
 <div class="row" style="margin-top: 35px;">
 
-    @*@if (Model.lista != null && Model.lista.Count > 0)
-    {*@
+    @if (Model != null)
+    {
         <table class="table">
             <tr>
                 <th>
@@ -25,7 +25,6 @@
                     Precio
                 </th>
                 <th>
-                    Precio Total
                 </th>
             </tr>
 
@@ -39,25 +38,34 @@
                         @Html.DisplayFor(modelItem => item.Cantidad)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Descuento)
+                        @Html.DisplayFor(modelItem => item.Descuento) %
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Precio)
+                        @Html.DisplayFor(modelItem => item.Precio) €
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TotalPrecio) €
+                        @Html.ActionLink(" ", "Delete", new { id = item.IdProducto }, new {
+                       @class = "glyphicon glyphicon-trash"})
                     </td>
                 </tr>
             }
         </table>
-    @*}
+        <h4 style="font-weight:bold;">Precio total:</h4>
+    }
     else
     {
         <h4 style="text-align:center;">No has añadido ningún producto al carrito.</h4>
-    }*@
-   
+    }
+    <br/>
+    <br />
     <p>
         <a class="btn btn-success" href="@Url.Action("Catalogo", "Productos")">Continuar comprando</a>
+    </p>
+    <p>
+        <a class="btn btn-default" href="@Url.Action("Index", "Home")">Comprar</a>
+    </p>
+    <p>
+        <a class="btn btn-danger" href="@Url.Action("Index", "Home")">Confirmar compra</a>
     </p>
 </div>
 <br />

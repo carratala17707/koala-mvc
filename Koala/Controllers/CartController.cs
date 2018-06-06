@@ -30,16 +30,17 @@ namespace Koala.Controllers
             foreach (var item in listaCarrito)
             {
                 var producto = productos.First(p => p.Id_Producto == item.IdProducto);
-
-                lista.Add(new CartViewModel
+                if (item != null)
                 {
-                    Cantidad = item.Cantidad,
-                    IdProducto = item.IdProducto,
-                    NombreProducto = producto.Nombre,
-                    Descuento = producto.Descuento,
-                    Precio = producto.Precio,
-                    //TotalPrecio = producto.Precio.Sum(p => p.Precio)
-                });
+                    lista.Add(new CartViewModel
+                    {
+                        Cantidad = item.Cantidad,
+                        IdProducto = item.IdProducto,
+                        NombreProducto = producto.Nombre,
+                        Descuento = producto.Descuento,
+                        Precio = item.Cantidad * producto.Precio
+                    });
+                }
             }
             return View(lista);
         }
@@ -66,7 +67,8 @@ namespace Koala.Controllers
             var productoEnCarrito = await _db.Carrito.Where(c => c.IdProducto == id).FirstOrDefaultAsync();
             if (productoEnCarrito != null)
             {
-                productoEnCarrito.Cantidad++;
+
+                productoEnCarrito.Cantidad++; 
                 _db.Entry(productoEnCarrito).State = EntityState.Modified;
             }
             else
@@ -80,6 +82,14 @@ namespace Koala.Controllers
             }
             await _db.SaveChangesAsync();
 
+            return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Delete(int? id)
+        {
+            Carrito carrito = await _db.Carrito.FindAsync(id);
+            _db.Carrito.Remove(carrito);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
     }
