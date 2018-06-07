@@ -184,9 +184,6 @@
                     <table class="table">
                         <tr>
                             <th>
-                                ID
-                            </th>
-                            <th>
                                 Num. Artículos
                             </th>
                             <th>
@@ -213,9 +210,6 @@
                         @foreach (var item in Model.Orders)
                         {
                             <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.NumPedido)
-                                </td>
                                 <td style="text-align:center;">
                                     @Html.DisplayFor(modelItem => item.NumArticulos)
                                 </td>
@@ -223,31 +217,47 @@
                                     @Html.DisplayFor(modelItem => item.Descripcion)
                                 </td>
                                 <td>
-                                    @{
-                                        string parameterValuePedido = item.FechaPedido.ToShortDateString();
+                                    @if (item.FechaPedido == DateTime.MinValue)
+	                                {
+                                        <span>-</span>
                                     }
-                                    @Html.DisplayFor(modelItem => parameterValuePedido)
+                                    else
+                                    {
+                                        @item.FechaPedido.ToShortDateString()
+                                    }
                                 </td>
                                 <td>
-                                    @{
-                                        string parameterValueConfirmado = item.FechaConfirmado.ToShortDateString();
+                                    @if (item.FechaConfirmado == DateTime.MinValue)
+                                    {
+                                        <span>-</span>
                                     }
-                                    @Html.DisplayFor(modelItem => parameterValueConfirmado)
+                                    else
+                                    {
+                                        @item.FechaConfirmado.ToShortDateString()
+                                    }
                                 </td>
                                 <td>
-                                    @{
-                                        string parameterValueEnviado = item.FechaEnviado.ToShortDateString();
+                                    @if (item.FechaEnviado == DateTime.MinValue)
+                                    {
+                                        <span>-</span>
                                     }
-                                    @Html.DisplayFor(modelItem => parameterValueEnviado)
+                                    else
+                                    {
+                                        @item.FechaEnviado.ToShortDateString()
+                                    }
                                 </td>
                                 <td>
-                                    @{
-                                        string parameterValueRecibido = item.FechaRecibido.ToShortDateString();
+                                    @if (item.FechaRecibido == DateTime.MinValue)
+                                    {
+                                        <span>-</span>
                                     }
-                                    @Html.DisplayFor(modelItem => parameterValueRecibido)
+                                    else
+                                    {
+                                        @item.FechaRecibido.ToShortDateString()
+                                    }
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.TotalPrecio) €
+                                    @item.TotalPrecio.ToString("C2")
                                 </td>
                                 <td>
                                     @Html.ActionLink("Detalle", "OrderDetails", new { id = item.NumPedido })

@@ -59,9 +59,9 @@ namespace Koala.Controllers
                     var order = new OrderViewModel
                     {
                         Descripcion = "",
-                        NumArticulos = item.Línea_Pedido.Count(),
+                        NumArticulos = item.Línea_Pedido.Sum(p => p.Cantidad),
                         NumPedido = item.Id_Pedido,
-                        TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio),
+                        TotalPrecio = item.Línea_Pedido.Sum(l => l.Precio * l.Cantidad),
                         FechaPedido = item.Fecha_Pedido,
                     };
                     if (item.Confirmado.HasValue)
@@ -84,14 +84,7 @@ namespace Koala.Controllers
                         order.FechaRecibido = item.Recibido.Value;
                         order.Estado = OrderViewModel.EstadoPedido.Recibido;
                     }
-                    string desc = string.Empty;
-                    foreach (var linea in item.Línea_Pedido)
-                    {
-                        if (linea.Productos != null)
-                        {
-                            desc += linea.Productos.Nombre + ", ";
-                        }
-                    }
+                    string desc = string.Join(", ", item.Línea_Pedido.Select(l => l.Nombre));
                     order.Descripcion = desc;
                     orders.Add(order);
                 }

@@ -38,7 +38,10 @@
                     @Html.DisplayFor(modelItem => item.Cantidad)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Precio) €
+                    @{ 
+                        double totalPrecio = (double)item.Precio * item.Cantidad;
+                    }
+                    @totalPrecio.ToString("C2")
                 </td>
             </tr>
         }

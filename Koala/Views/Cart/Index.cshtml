@@ -8,7 +8,7 @@
 
 <div class="row" style="margin-top: 35px;">
 
-    @if (Model != null)
+    @if (Model != null && Model.Count() > 0)
     {
         <table class="table">
             <tr>
@@ -28,8 +28,12 @@
                 </th>
             </tr>
 
+            @{ 
+                double precioTotal = 0d;
+            }
             @foreach (var item in Model)
             {
+                precioTotal += item.Precio;
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.NombreProducto)
@@ -41,35 +45,57 @@
                         @Html.DisplayFor(modelItem => item.Descuento) %
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Precio) €
+                        @item.Precio.ToString("C2")
                     </td>
                     <td>
-                        @Html.ActionLink(" ", "Delete", new { id = item.IdProducto }, new {
+                        @Html.ActionLink(" ", "Delete", new { id = item.IdCarrto }, new {
                        @class = "glyphicon glyphicon-trash"})
                     </td>
                 </tr>
             }
         </table>
-        <h4 style="font-weight:bold;">Precio total:</h4>
+
+        <h4 style="font-weight:bold; text-align: right;">Precio total: @precioTotal.ToString("C2")</h4>
+        <br />
+
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                <a class="btn btn-success" href="@Url.Action("Catalogo", "Productos")">Continuar comprando</a>
+            </div>
+
+            <div class="btn-group">
+                <a class="btn btn-default" data-toggle="modal" data-target="#modal-confirmacion">Comprar</a>
+            </div>
+        </div>
     }
     else
     {
         <h4 style="text-align:center;">No has añadido ningún producto al carrito.</h4>
     }
+
     <br/>
     <br />
-    <p>
-        <a class="btn btn-success" href="@Url.Action("Catalogo", "Productos")">Continuar comprando</a>
-    </p>
-    <p>
-        <a class="btn btn-default" href="@Url.Action("Index", "Home")">Comprar</a>
-    </p>
-    <p>
-        <a class="btn btn-danger" href="@Url.Action("Index", "Home")">Confirmar compra</a>
-    </p>
 </div>
-<br />
-<br />
-<br />
-<br />
 
+@using (Html.BeginForm("MakeOrder", "Cart", FormMethod.Post))
+{
+   <div class="modal fade" id="modal-confirmacion" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">¡Atención!</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Desea finalizar su compra?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Confirmar compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
