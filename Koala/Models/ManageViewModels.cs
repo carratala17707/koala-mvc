@@ -56,26 +56,37 @@ namespace Koala.Models
 
     public class OrderViewModel
     {
+        [Display(Name = "Pedido")]
         public int NumPedido { get; set; }
+        [Display(Name = "Cliente")]
         public int Cliente { get; set; }
+        [Display(Name = "Fecha pedido")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaPedido { get; set; }
+        [Display(Name = "Fecha confirmado")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaConfirmado { get; set; }
+        [Display(Name = "Fecha pagado")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaPagado { get; set; }
+        [Display(Name = "Fecha enviado")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaEnviado { get; set; }
+        [Display(Name = "Fecha recibido")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime FechaRecibido { get; set; }
+        [Display(Name = "Precio total")]
         public decimal TotalPrecio { get; set; }
+        [Display(Name = "Descripción")]
         public string Descripcion { get; set; }
+        [Display(Name = "Artículos")]
         public int NumArticulos { get; set; }
+        [Display(Name = "Estado")]
         public EstadoPedido Estado { get; set; }
 
         public enum EstadoPedido

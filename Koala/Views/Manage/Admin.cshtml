@@ -169,13 +169,27 @@ else
                                 @Html.DisplayFor(modelItem => item.FechaConfirmado)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FechaEnviado)
+                                @if (item.FechaEnviado == DateTime.MinValue)
+                                {
+                                    <span>-</span>
+                                }
+                                else
+                                {
+                                    @item.FechaEnviado.ToShortDateString()
+                                }
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FechaRecibido)
+                                @if (item.FechaRecibido == DateTime.MinValue)
+                                {
+                                    <span>-</span>
+                                }
+                                else
+                                {
+                                    @item.FechaRecibido.ToShortDateString()
+                                }
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.TotalPrecio) €
+                                @item.TotalPrecio.ToString("C2")
                             </td>
                             <td>
                                 @Html.ActionLink("Editar", "EditOrder", new { id = item.NumPedido })

@@ -88,7 +88,6 @@ namespace Koala.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
